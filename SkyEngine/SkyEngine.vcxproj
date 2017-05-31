@@ -103,7 +103,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;D:\_Dev\2016\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;D:\_Dev\2016\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;C:\Users\VORONOVE\Source\Repos\DirectXMesh\DirectXMesh\Bin\Desktop_2015\Win32\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>DirectXMesh.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
