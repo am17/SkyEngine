@@ -133,7 +133,7 @@ float4 main(MeshVertex In) : SV_TARGET
 
 	//water_color.a = fExpDepthHIGH;// In.depthPosition.z / 200;
 
-	water_color = depthMap.Sample(g_samplerGradient, fft_tc);
+	//water_color = depthMap.Sample(g_samplerGradient, fft_tc);
 	
 	return water_color;
 }
