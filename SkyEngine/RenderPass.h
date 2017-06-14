@@ -60,3 +60,57 @@ enum class ZWrite
 	On,
 	Off
 };
+
+class RenderPassBase
+{
+public:
+	virtual ~RenderPassBase() {}
+	virtual void apply() 
+	{
+		setRasterizerState();
+		setDepthStencilState();
+		setBlendState();
+
+		setVertexShader();
+		setHullShader();
+		setDomainShader();
+		setGeometryShader();
+		setPixelShader();
+	}
+protected:
+	virtual void setRasterizerState() 
+	{
+		//NoCull
+	}
+	virtual void setDepthStencilState() 
+	{
+		//DepthNormal 0
+	}
+	virtual void setBlendState() 
+	{
+		//NoBlending, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF
+	}
+	virtual void setVertexShader() 
+	{
+		//NULL
+	}
+	virtual void setHullShader()
+	{
+		//NULL
+	}
+	virtual void setDomainShader()
+	{
+		//NULL
+	}
+	virtual void setGeometryShader()
+	{
+		//NULL
+	}
+	virtual void setPixelShader()
+	{
+		//NULL
+	}
+private:
+	void* _pContext;
+};
+
