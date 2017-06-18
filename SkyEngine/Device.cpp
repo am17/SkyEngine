@@ -131,6 +131,11 @@ void Device::setRenderTarget(ERenderTarget renderTarget)
 	_pDeviceImpl->setRenderTarget(renderTarget);
 }
 
+void Device::draw(unsigned int vertexCount, unsigned int startVertexIndex)
+{
+	_pDeviceImpl->draw(vertexCount, startVertexIndex);
+}
+
 void Device::drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation)
 {
 	_pDeviceImpl->drawIndexed(IndexCount, StartIndexLocation, BaseVertexLocation);

@@ -61,6 +61,8 @@ bool SystemClass::Initialize()
 	//m_render->initDevice(m_hwnd, screenWidth, screenHeight, false);
 
 	m_scene = new Scene();
+	m_scene->init(m_device);
+
 	m_scene->getCamera()->setPosition(786, 167, -301);
 	//m_scene->init(m_render);
 
@@ -69,30 +71,30 @@ bool SystemClass::Initialize()
 	/*Entity* entity = m_efactory->createTeapotEntity();
 	m_scene->add(entity);*/
 
-	Entity* terrainEntity = m_efactory->createEntity();
+	//Entity* terrainEntity = m_efactory->createEntity();
 
 	Camera *cam = m_scene->getCamera();
 
-	Terrain* terrain = new Terrain(m_device, terrainEntity, cam);
-	terrain->init();
+	//Terrain* terrain = new Terrain(m_device, terrainEntity, cam);
+	//terrain->init();
 
-	m_scene->add(terrain);
+	//m_scene->add(terrain);
 
-	Entity* sphere = m_efactory->createGeoSphereEntity();
+	//Entity* sphere = m_efactory->createGeoSphereEntity();
 
-	Skybox *sky = new Skybox(m_device, sphere, cam);
+	//Skybox *sky = new Skybox(m_device, sphere, cam);
 
-	m_scene->add(sky);
+	//m_scene->add(sky);
 
-	Entity* oceanEntity = m_efactory->createEntity();
+	//Entity* oceanEntity = m_efactory->createEntity();
 
-	Ocean *ocean = new Ocean(m_device, oceanEntity, cam);
-	ocean->init();
+	//Ocean *ocean = new Ocean(m_device, oceanEntity, cam);
+	//ocean->init();
 
-	m_scene->add(ocean);
+	//m_scene->add(ocean);
 
-	Entity* debugQuad = m_efactory->createQuadEntity();
-	m_scene->add(debugQuad);
+	//Entity* debugQuad = m_efactory->createQuadEntity();
+	//m_scene->add(debugQuad);
 
 	//cam->setPosition(-441.0f, -10.0f, -489.0f);
 	//cam->setPosition(-540.0f, -94.0f, -498.0f);

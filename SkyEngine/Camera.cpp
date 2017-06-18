@@ -124,7 +124,7 @@ void Camera::notifyObservers()
 	{
 		Entity* entity = static_cast<Entity*>(*iterator);
 
-		GraphicComponent* grComp = entity->getGraphicComponent();
+		MeshComponent* grComp = entity->getMeshComponent();
 
 		grComp->updateViewProj(m_ViewProj);
 	}

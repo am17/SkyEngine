@@ -1,116 +1,79 @@
 #pragma once
 #include "Shader.h"
-#include "RenderTarget.h"
 
 class RenderPass
 {
 public:
-	RenderPass(Shader *aVertexShader, Shader *aPixelShader, ERenderTarget aRenderTarget = ERenderTarget::RT_BACK_BUFFER)
-		:pVertexShader(aVertexShader),
-		pPixelShader(aPixelShader), 
-		_renderTarget(aRenderTarget)
-	{}
-	~RenderPass(){}
-	void setVertexShader(Shader* aVertexShader)
-	{
-		pVertexShader = aVertexShader;
-	}
-	Shader* getVertexShader() const
-	{
-		return pVertexShader;
-	}
-	void setPixelShader(Shader* aPixelShader)
-	{
-		pPixelShader = aPixelShader;
-	}
-	Shader* getPixelShader() const
-	{
-		return pPixelShader;
-	}
-	ERenderTarget getRenderTarget() const
-	{
-		return _renderTarget;
-	}
-private:
-	Shader *pVertexShader;
-	Shader *pPixelShader;
-	ERenderTarget _renderTarget;
-};
-
-enum class Cull
-{
-	Back, 
-	Front,
-	Off
-};
-
-enum class ZTest
-{
-	Less, 
-	Greater, 
-	LEqual, 
-	GEqual, 
-	Equal, 
-	NotEqual, 
-	Always
-};
-
-enum class ZWrite
-{
-	On,
-	Off
-};
-
-class RenderPassBase
-{
-public:
-	virtual ~RenderPassBase() {}
-	virtual void apply() 
+	RenderPass(): 
+		_vertexShader(nullptr),
+		_hullShader(nullptr),
+		_domainShader(nullptr),
+		_geometryShader(nullptr),
+		_pixelShader(nullptr) {}
+	virtual ~RenderPass() {}
+	void apply()
 	{
 		setRasterizerState();
 		setDepthStencilState();
 		setBlendState();
 
 		setVertexShader();
-		setHullShader();
-		setDomainShader();
-		setGeometryShader();
+		//setHullShader();
+		//setDomainShader();
+		//setGeometryShader();
 		setPixelShader();
 	}
+	void init(Shader *vertexShader, Shader *hullShader, Shader *domainShader, Shader *geometryShader, Shader *pixelShader)
+	{
+		assert(vertexShader);
+		//assert(hullShader);
+		//assert(domainShader);
+		//assert(geometryShader);
+		assert(pixelShader);
+
+		_vertexShader = vertexShader;
+		_hullShader = hullShader;
+		_domainShader = domainShader;
+		_geometryShader = geometryShader;
+		_pixelShader = pixelShader;
+	}
 protected:
-	virtual void setRasterizerState() 
+	void setRasterizerState()
 	{
 		//NoCull
 	}
-	virtual void setDepthStencilState() 
+	void setDepthStencilState()
 	{
 		//DepthNormal 0
 	}
-	virtual void setBlendState() 
+	void setBlendState()
 	{
 		//NoBlending, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF
 	}
-	virtual void setVertexShader() 
+	void setVertexShader()
 	{
-		//NULL
+		_vertexShader->bind();
 	}
-	virtual void setHullShader()
+	void setHullShader()
 	{
-		//NULL
+		_hullShader->bind();
 	}
-	virtual void setDomainShader()
+	void setDomainShader()
 	{
-		//NULL
+		_domainShader->bind();
 	}
-	virtual void setGeometryShader()
+	void setGeometryShader()
 	{
-		//NULL
+		_geometryShader->bind();
 	}
-	virtual void setPixelShader()
+	void setPixelShader()
 	{
-		//NULL
+		_pixelShader->bind();
 	}
 private:
-	void* _pContext;
+	Shader *_vertexShader;
+	Shader *_hullShader;
+	Shader *_domainShader;
+	Shader *_geometryShader;
+	Shader *_pixelShader;
 };
-

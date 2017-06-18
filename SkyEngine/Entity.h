@@ -1,6 +1,6 @@
 #pragma once
 #include "component.h"
-#include "GraphicComponent.h"
+#include "MeshComponent.h"
 #include <list>
 #include <DirectXMath.h>
 
@@ -20,12 +20,10 @@ public:
 	SKYENGINEDLL void setPosition(float x, float y, float z);
 	SKYENGINEDLL void setPosition(XMFLOAT3 &position);
 	XMFLOAT3 getPosition() const;
-	void setGraphicComponent(GraphicComponent * pGraphicComponent);
-	virtual GraphicComponent *getGraphicComponent() const;
+	virtual MeshComponent *getMeshComponent();
 protected:
 	int _id;
 	list<Component*> _components;
-	GraphicComponent *_pGraphicComponent;
 	XMFLOAT3 _position;
 };
 

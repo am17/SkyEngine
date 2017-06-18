@@ -32,6 +32,7 @@ public:
 	SKYENGINEDLL void setDepthState(sky::EDepthState depthState);
 	SKYENGINEDLL void setBlendState(sky::EBlendState blendState);
 	SKYENGINEDLL void setRenderTarget(ERenderTarget renderTarget);
+	SKYENGINEDLL void draw(unsigned int vertexCount, unsigned int startVertexIndex = 0);
 	SKYENGINEDLL void drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation);
 	SKYENGINEDLL void drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation);
 private:

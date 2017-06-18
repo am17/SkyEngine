@@ -32,7 +32,7 @@ public:
 
 		for (size_t i = 0; i < renderPassCount; i++)
 		{
-			const RenderPass *pass = data->getRenderPass(i);
+			RenderPass *pass = data->getRenderPass(i);
 
 			static float t = 0.0f;
 			t += 0.001;
@@ -65,11 +65,7 @@ public:
 			_cb->bind(sky::EShaderType::STVertex);
 			_cb->update(&cb);
 
-			Shader *vShader = pass->getVertexShader();
-			vShader->bind();
-
-			Shader *pShader = pass->getPixelShader();
-			pShader->bind();
+			pass->apply();
 
 			Texture *texture = data->getTexture(0);
 			texture->bind(sky::EShaderType::STPixel);

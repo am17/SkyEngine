@@ -47,7 +47,8 @@ void Ocean::init()
 	Shader *vertexShader = _pShaderFactory->getShader(L"oceanVS.hlsl", sky::EShaderType::STVertex);
 	Shader *pixelShader = _pShaderFactory->getShader(L"oceanPS.hlsl", sky::EShaderType::STPixel);
 
-	RenderPass *renderPass1 = new RenderPass(vertexShader, pixelShader);
+	RenderPass *renderPass1 = new RenderPass();
+	renderPass1->init(vertexShader, nullptr, nullptr, nullptr, pixelShader);
 
 	_renderData->addRenderPass(renderPass1);
 
@@ -79,11 +80,9 @@ void Ocean::init()
 
 	IRenderer* render = new OceanRenderer(_pDevice, nRings, pTileRings, &perFrameBuffer, &perFrameBuffer4);
 
-	GraphicComponent* grComponent = new GraphicComponent(_renderData, render);
+	MeshComponent* grComponent = new MeshComponent(_renderData, render);
 
 	_entity->add(grComponent);
-
-	_entity->setGraphicComponent(grComponent);
 }
 
 void Ocean::createIB()

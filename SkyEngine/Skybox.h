@@ -47,7 +47,7 @@ public:
 
 		for (size_t i = 0; i < renderPassCount; i++)
 		{
-			const RenderPass *pass = data->getRenderPass(i);
+			RenderPass *pass = data->getRenderPass(i);
 
 			data->updateTransform();
 
@@ -73,11 +73,7 @@ public:
 			_cb->bind(sky::EShaderType::STVertex);
 			_cb->update(&cb);
 
-			Shader *vShader = pass->getVertexShader();
-			vShader->bind();
-
-			Shader *pShader = pass->getPixelShader();
-			pShader->bind();
+			pass->apply();
 
 			Texture *texture = data->getTexture(0);
 			texture->bind(sky::EShaderType::STPixel);
@@ -89,8 +85,7 @@ public:
 
 			_pDevice->setRepeatMaxAnisoSampler(sky::EShaderType::STPixel, 0);
 
-			ERenderTarget renderTarget = pass->getRenderTarget();
-			_pDevice->setRenderTarget(renderTarget);
+			_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
 
 			unsigned int indexCount = ib->getIndexCount();
 

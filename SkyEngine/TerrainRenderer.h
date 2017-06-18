@@ -46,10 +46,9 @@ void TerrainRenderer::render(RenderData *data)
 
 	for (size_t i = 0; i < renderPassCount; i++)
 	{
-		const RenderPass *pass = data->getRenderPass(i);
+		RenderPass *pass = data->getRenderPass(i);
 
-		ERenderTarget renderTarget = pass->getRenderTarget();
-		_pDevice->setRenderTarget(renderTarget);
+		_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
 
 		_pDevice->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLESTRIP);
 
@@ -59,11 +58,7 @@ void TerrainRenderer::render(RenderData *data)
 
 		data->getConstantBuffer(0)->bind(sky::EShaderType::STVertex, 0);
 
-		Shader* vertexShader = pass->getVertexShader();
-		Shader* pixelShader = pass->getPixelShader();
-
-		vertexShader->bind();
-		pixelShader->bind();
+		pass->apply();
 
 		data->getTexture(0)->bind(sky::EShaderType::STVertex, 0);
 

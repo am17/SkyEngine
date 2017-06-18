@@ -3,14 +3,21 @@
 
 
 Scene::Scene()
+	:_pCamera(nullptr),
+	bbRenderer(nullptr)
 {
-	_pCamera = new Camera(800, 600, 1.0f, 20000.f);
-	pEntitiesUpdater = new SceneUpdater(_entities);
+	
 }
 
 
 Scene::~Scene()
 {
+	if (bbRenderer)
+	{
+		delete bbRenderer;
+		bbRenderer = nullptr;
+	}
+
 	if (_pCamera)
 	{
 		delete _pCamera;
@@ -36,10 +43,20 @@ void Scene::update()
 	_pCamera->update();
 
 	pEntitiesUpdater->update();
+
+	bbRenderer->render(nullptr);
 }
 
 
 Camera* Scene::getCamera() const
 {
 	return _pCamera;
+}
+
+void Scene::init(Device * pDevice)
+{
+	_pCamera = new Camera(800, 600, 1.0f, 20000.f);
+	pEntitiesUpdater = new SceneUpdater(_entities);
+
+	bbRenderer = new BackBufferRenderer(pDevice);
 }

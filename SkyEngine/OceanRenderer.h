@@ -54,10 +54,9 @@ void OceanRenderer::render(RenderData *data)
 
 	for (size_t i = 0; i < renderPassCount; i++)
 	{
-		const RenderPass *pass = data->getRenderPass(i);
+		RenderPass *pass = data->getRenderPass(i);
 
-		ERenderTarget renderTarget = pass->getRenderTarget();
-		_pDevice->setRenderTarget(renderTarget);
+		_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
 
 		data->getInputLayout()->bind();
 
@@ -65,8 +64,8 @@ void OceanRenderer::render(RenderData *data)
 
 		data->getConstantBuffer(0)->bind(sky::EShaderType::STVertex, 0);
 		data->getConstantBuffer(1)->bind(sky::EShaderType::STVertex, 1);
-		pass->getVertexShader()->bind();
-		pass->getPixelShader()->bind();
+
+		pass->apply();
 
 		data->getConstantBuffer(0)->bind(sky::EShaderType::STPixel, 0);
 		data->getConstantBuffer(1)->bind(sky::EShaderType::STPixel, 1);

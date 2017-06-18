@@ -16,10 +16,9 @@ public:
 
 		for (size_t i = 0; i < renderPassCount; i++)
 		{
-			const RenderPass *pass = data->getRenderPass(i);
+			RenderPass *pass = data->getRenderPass(i);
 
-			ERenderTarget renderTarget = pass->getRenderTarget();
-			_pDevice->setRenderTarget(renderTarget);
+			_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
 
 			_pDevice->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
@@ -32,11 +31,7 @@ public:
 			IndexBuffer* ib = data->getIndexBuffer();
 			ib->bind();
 
-			Shader *vShader = pass->getVertexShader();
-			vShader->bind();
-
-			Shader *pShader = pass->getPixelShader();
-			pShader->bind();
+			pass->apply();
 
 			Texture *texture = _pDevice->getDepthMap();// data->getTexture(0);
 

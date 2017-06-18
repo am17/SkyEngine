@@ -30,13 +30,21 @@ void Entity::add(Component *component)
 	_components.push_back(component);
 }
 
-void Entity::setGraphicComponent(GraphicComponent * pGraphicComponent)
+MeshComponent *Entity::getMeshComponent()
 {
-	_pGraphicComponent = pGraphicComponent;
-}
-GraphicComponent *Entity::getGraphicComponent() const
-{
-	return _pGraphicComponent;
+	MeshComponent *meshComponent = nullptr;
+	for (list<Component*>::iterator it = _components.begin(); it != _components.end(); ++it)
+	{
+		MeshComponent *comp = dynamic_cast<MeshComponent*>(*it);
+
+		if (comp != nullptr)
+		{
+			meshComponent = comp;
+		}
+		
+	}
+
+	return meshComponent;
 }
 
 void Entity::setPosition(float x, float y, float z)
@@ -45,13 +53,23 @@ void Entity::setPosition(float x, float y, float z)
 	_position.y = y;
 	_position.z = z;
 
-	_pGraphicComponent->updateTranslate(_position);
+	MeshComponent *meshComponent = getMeshComponent();
+
+	if (meshComponent)
+	{
+		meshComponent->updateTranslate(_position);
+	}
 }
 void Entity::setPosition(XMFLOAT3 &position)
 {
 	_position = position;
 
-	_pGraphicComponent->updateTranslate(_position);
+	MeshComponent *meshComponent = getMeshComponent();
+
+	if (meshComponent)
+	{
+		meshComponent->updateTranslate(_position);
+	}
 }
 XMFLOAT3 Entity::getPosition() const
 {

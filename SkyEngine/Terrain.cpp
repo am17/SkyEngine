@@ -70,11 +70,9 @@ void Terrain::init()
 
 	IRenderer* render = new TerrainRenderer(_pDevice, nRings, pTileRings, &perFrameBuffer, &perFrameBuffer4);
 
-	GraphicComponent* grComponent = new GraphicComponent(_renderData, render);
+	MeshComponent* grComponent = new MeshComponent(_renderData, render);
 
 	_entity->add(grComponent);
-
-	_entity->setGraphicComponent(grComponent);
 }
 
 void Terrain::createIB()
@@ -182,7 +180,8 @@ void Terrain::initPass1()
 	InputLayout *inputLayout = _pDevice->createInputLayout(layoutDesc, 1, vertexShader->getByteCode(), vertexShader->getCodeLength());
 	_renderData->setInputLayout(inputLayout);
 
-	RenderPass *renderPass = new RenderPass(vertexShader, pixelShader);
+	RenderPass *renderPass = new RenderPass();
+	renderPass->init(vertexShader, nullptr, nullptr, nullptr, pixelShader);
 
 	_renderData->addRenderPass(renderPass);
 }

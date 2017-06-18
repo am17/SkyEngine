@@ -11,9 +11,9 @@ public:
 	{
 		_entity->update();
 	}
-	GraphicComponent *getGraphicComponent() const override
+	MeshComponent *getMeshComponent() override
 	{
-		return _entity->getGraphicComponent();
+		return _entity->getMeshComponent();
 	}
 protected:
 	Entity *_entity;

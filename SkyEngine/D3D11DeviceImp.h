@@ -32,6 +32,7 @@ public:
 	void clearRenderTarget(ERenderTarget renderTarget) override;
 	void setRenderTarget(ERenderTarget renderTarget) override;
 	Texture *getDepthMap() const override;
+	void draw(unsigned int vertexCount, unsigned int startVertexIndex) override;
 	void drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation) override;
 	void drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation) override;
 

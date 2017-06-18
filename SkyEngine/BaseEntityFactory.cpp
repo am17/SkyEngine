@@ -3,7 +3,7 @@
 #include "RenderData.h"
 #include"IRenderer.h"
 #include "Renderer2D.h"
-#include "GraphicComponent.h"
+#include "MeshComponent.h"
 #include "GeometricPrimitive.h"
 
 #include <d3dcompiler.h>
@@ -143,7 +143,8 @@ Entity*  BaseEntityFactory::createQuadEntity()
 	data->setVertexBuffer(vb);
 	data->setIndexBuffer(ib);
 
-	RenderPass *renderPass1 = new RenderPass(vertexShader, pixelShader);
+	RenderPass *renderPass1 = new RenderPass();
+	renderPass1->init(vertexShader, nullptr, nullptr, nullptr, pixelShader);
 
 	data->addRenderPass(renderPass1);
 
@@ -151,10 +152,9 @@ Entity*  BaseEntityFactory::createQuadEntity()
 	data->addTexture(texture);
 	IRenderer* render = new Renderer2D(_pDevice);
 
-	GraphicComponent* grComponent = new GraphicComponent(data, render);
+	MeshComponent* grComponent = new MeshComponent(data, render);
 
 	entity->add(grComponent);
-	entity->setGraphicComponent(grComponent);
 
 	return entity;
 }
@@ -197,7 +197,8 @@ Entity* BaseEntityFactory::initBaseEntity(const void *pVBData, unsigned int vbEl
 	data->setVertexBuffer(vb);
 	data->setIndexBuffer(ib);
 
-	RenderPass *renderPass1 = new RenderPass(vertexShader, pixelShader);
+	RenderPass *renderPass1 = new RenderPass();
+	renderPass1->init(vertexShader, nullptr, nullptr, nullptr, pixelShader);
 
 	data->addRenderPass(renderPass1);
 
@@ -205,10 +206,9 @@ Entity* BaseEntityFactory::initBaseEntity(const void *pVBData, unsigned int vbEl
 	data->addTexture(texture);
 	IRenderer* render = new Renderer(_pDevice);
 
-	GraphicComponent* grComponent = new GraphicComponent(data, render);
+	MeshComponent* grComponent = new MeshComponent(data, render);
 
 	entity->add(grComponent);
-	entity->setGraphicComponent(grComponent);
 
 	return entity;
 }

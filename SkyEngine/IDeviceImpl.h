@@ -32,6 +32,7 @@ public:
 	virtual void clearRenderTarget(ERenderTarget renderTarget) = 0;
 	virtual void setRenderTarget(ERenderTarget renderTarget) = 0;
 	virtual Texture *getDepthMap() const = 0;
+	virtual void draw(unsigned int vertexCount, unsigned int startVertexIndex) = 0;
 	virtual void drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation) = 0;
 	virtual void drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation) = 0;
 };

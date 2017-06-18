@@ -9,18 +9,19 @@ Skybox::Skybox(Device *aDevice, Entity *entity, Camera *aCamera)
 {
 	_pShaderFactory = new ShaderFactory(_pDevice);
 
-	_renderData = EntityDecorator::getGraphicComponent()->getRenderData();
+	_renderData = EntityDecorator::getMeshComponent()->getRenderData();
 
 	IRenderer* render = new SkyboxRenderer(_pDevice);
 
-	EntityDecorator::getGraphicComponent()->setRenderer(render);
+	EntityDecorator::getMeshComponent()->setRenderer(render);
 
 	_renderData->dropRenderPass(0);
 
 	Shader *vertexShader = _pShaderFactory->getShader(L"skyboxVS.hlsl", sky::EShaderType::STVertex);
 	Shader *pixelShader = _pShaderFactory->getShader(L"skyboxPS.hlsl", sky::EShaderType::STPixel);
 
-	RenderPass *renderPass1 = new RenderPass(vertexShader, pixelShader);
+	RenderPass *renderPass1 = new RenderPass();
+	renderPass1->init(vertexShader, nullptr, nullptr, nullptr, pixelShader);
 
 	_renderData->addRenderPass(renderPass1);
 

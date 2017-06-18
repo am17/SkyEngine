@@ -930,6 +930,11 @@ Texture *D3D11DeviceImpl::getDepthMap() const
 	return _depthMap;
 }
 
+void D3D11DeviceImpl::draw(unsigned int vertexCount, unsigned int startVertexIndex)
+{
+	m_deviceContext->Draw(vertexCount, startVertexIndex);
+}
+
 void D3D11DeviceImpl::drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation)
 {
 	m_deviceContext->DrawIndexed(IndexCount, StartIndexLocation, BaseVertexLocation);

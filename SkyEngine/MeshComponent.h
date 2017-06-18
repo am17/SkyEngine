@@ -3,11 +3,11 @@
 #include "RenderData.h"
 #include "IRenderer.h"
 
-class GraphicComponent : public Component
+class MeshComponent : public Component
 {
 public:
-	GraphicComponent(RenderData* aRenderData, IRenderer* aRenderer);
-	~GraphicComponent();
+	MeshComponent(RenderData* aRenderData, IRenderer* aRenderer);
+	~MeshComponent();
 	void update();
 	void updateViewProj(XMFLOAT4X4 *aViewProj);
 	void updateTranslate(XMFLOAT3 position);
