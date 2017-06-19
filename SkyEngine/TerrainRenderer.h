@@ -48,7 +48,7 @@ void TerrainRenderer::render(RenderData *data)
 	{
 		RenderPass *pass = data->getRenderPass(i);
 
-		_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
+		_pDevice->setBackBufferAsRenderTarget();
 
 		_pDevice->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLESTRIP);
 

@@ -21,9 +21,9 @@ void Texture::bind(sky::EShaderType shaderType, unsigned int startSlot)
 	_impl->bind(shaderType, startSlot);
 }
 
-void Texture::resolve()
+void Texture::bindAsRenderTarget()
 {
-	_impl->resolve();
+	_impl->bindAsRenderTarget();
 }
 
 void Texture::saveToFile(const wchar_t* fileName)

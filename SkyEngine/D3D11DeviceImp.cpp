@@ -299,23 +299,6 @@ bool D3D11DeviceImpl::createDepthStencilBuffer(DXGI_FORMAT resourceDataFormat)
 		return false;
 	}
 
-	D3D11_SHADER_RESOURCE_VIEW_DESC srv_desc;
-	srv_desc.Format = DXGI_FORMAT_R32_FLOAT;
-	srv_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-	srv_desc.Texture2D.MipLevels = 1;
-	srv_desc.Texture2D.MostDetailedMip = 0;
-
-	result = m_device->CreateShaderResourceView(m_depthStencilBuffer, &srv_desc, &_depthMapTexture);
-
-	if (FAILED(result))
-	{
-		return false;
-	}
-
-	ITextureImpl *textureImpl = new D3D11TextureImpl(m_device, m_deviceContext, _depthMapTexture);
-
-	_depthMap = new Texture(textureImpl);
-
 	return true;
 }
 bool D3D11DeviceImpl::createDepthStencilStates()
@@ -658,13 +641,6 @@ bool D3D11DeviceImpl::fillDispayModeRational(IDXGIAdapter* adapter, DXGI_FORMAT 
 //	return true;
 //}
 
-void D3D11DeviceImpl::clearBackBuffer()
-{
-	clearRenderTarget(ERenderTarget::RT_BACK_BUFFER);
-
-	//m_deviceContext->ClearDepthStencilView(m_depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
-}
-
 void D3D11DeviceImpl::present()
 {
 	m_swapChain->Present(m_vsync_enabled ? 1 : 0, 0);
@@ -762,39 +738,11 @@ Texture* D3D11DeviceImpl::createTextureFromFile(wchar_t* filename)
 	return texture;
 }
 
-Texture* D3D11DeviceImpl::createFresnelMap()
+Texture * D3D11DeviceImpl::createTexture2D(unsigned int width, unsigned int height, const void * data, bool createRenderTarget, unsigned int multiSampleCount, unsigned int multiSampleQuality)
 {
 	ITextureImpl *textureImpl = new D3D11TextureImpl(m_device, m_deviceContext);
 
-	const int FRESNEL_TEX_SIZE = 256;
-
-	float blending = 16.0f;
-
-	unsigned long* buffer = new unsigned long[FRESNEL_TEX_SIZE];
-	for (int i = 0; i < FRESNEL_TEX_SIZE; i++)
-	{
-		float cos_a = i / (FLOAT)FRESNEL_TEX_SIZE;
-		// Using water's refraction index 1.33
-
-		XMVECTOR CosIncidentAngle = XMVectorSet(cos_a, cos_a, cos_a, cos_a);
-		XMVECTOR RefractionIndex = XMVectorSet(1.33f, 1.33f, 1.33f, 1.33f);
-
-		XMVECTOR fresnelVec = XMFresnelTerm(CosIncidentAngle, RefractionIndex);
-
-		unsigned long fresnel = (unsigned long)(fresnelVec.m128_f32[0] * 255);
-
-		unsigned long sky_blend = (unsigned long)(powf(1 / (1 + cos_a), blending) * 255);
-
-		buffer[i] = (sky_blend << 8) | fresnel;
-	}
-
-	bool created = textureImpl->createTexture1D(FRESNEL_TEX_SIZE, buffer);
-
-	if (buffer != nullptr)
-	{
-		delete[] buffer;
-		buffer = nullptr;
-	}
+	bool created = textureImpl->createTexture2D(width, height, data, createRenderTarget, multiSampleCount, multiSampleQuality);
 
 	assert(created);
 
@@ -932,45 +880,16 @@ void D3D11DeviceImpl::setBlendState(sky::EBlendState blendState)
 	}
 }
 
-void D3D11DeviceImpl::clearRenderTarget(ERenderTarget renderTarget)
+void D3D11DeviceImpl::clearBackBuffer()
 {
-	switch (renderTarget)
-	{
-	case ERenderTarget::RT_BACK_BUFFER:
-		{
-			float backBufferColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
-			m_deviceContext->ClearRenderTargetView(m_backBufferRenderTarget, backBufferColor);
-			m_deviceContext->ClearDepthStencilView(m_depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
-		}
-		break;
-	default:
-		break;
-	}
+	float backBufferColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	m_deviceContext->ClearRenderTargetView(m_backBufferRenderTarget, backBufferColor);
+	m_deviceContext->ClearDepthStencilView(m_depthStencil, D3D11_CLEAR_DEPTH, 1.0f, 0);
 }
 
-void D3D11DeviceImpl::setRenderTarget(ERenderTarget renderTarget)
+void D3D11DeviceImpl::setBackBufferAsRenderTarget()
 {
-	if (renderTarget != _currentRenderTarget)
-	{
-		_currentRenderTarget = renderTarget;
-
-		switch (renderTarget)
-		{
-		case ERenderTarget::RT_BACK_BUFFER:
-			{
-				m_deviceContext->OMSetRenderTargets(1, &m_backBufferRenderTarget, m_depthStencil);
-			}
-			break;
-			break;
-		default:
-			break;
-		}
-	}
-}
-
-Texture *D3D11DeviceImpl::getDepthMap() const
-{
-	return _depthMap;
+	m_deviceContext->OMSetRenderTargets(1, &m_backBufferRenderTarget, m_depthStencil);
 }
 
 void D3D11DeviceImpl::draw(unsigned int vertexCount, unsigned int startVertexIndex)
@@ -986,14 +905,6 @@ void D3D11DeviceImpl::drawIndexed(unsigned int IndexCount, unsigned int StartInd
 void D3D11DeviceImpl::drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation)
 {
 	m_deviceContext->DrawIndexedInstanced(indexCountPerInstance, instanceCount, startIndexLocation, baseVertexLocation, startInstanceLocation);
-}
-
-void D3D11DeviceImpl::resolveTexture(Texture * texture)
-{
-	ID3D11Resource *pDstResource = nullptr;
-	ID3D11Resource *pSrcResource = nullptr;
-
-	m_deviceContext->ResolveSubresource(pDstResource, 0, pSrcResource, 0, DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 
 void D3D11DeviceImpl::testScene()

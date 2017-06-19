@@ -120,9 +120,9 @@ bool SystemClass::Initialize()
 	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWLEFT, upCommand);
 	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWRIGHT, downCommand);
 
-	Texture* depthMap = m_device->getDepthMap();
-	ICommand *saveScreenCommand = new SimpleCommand<Texture>(depthMap, &Texture::saveToFile);
-	inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWUP, saveScreenCommand);
+	//Texture* depthMap = m_device->getDepthMap();
+	//ICommand *saveScreenCommand = new SimpleCommand<Texture>(depthMap, &Texture::saveToFile);
+	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWUP, saveScreenCommand);
 
 	//Entity *cube = m_scene->addEntity(EBASIC_ENTITY::ENTITY_BOX);
 	//cube->setScale(4.0f, 2.0f, 4.0f);
@@ -229,7 +229,7 @@ bool SystemClass::Frame() const
 	DIMOUSESTATE& mstate = inputHandler->getMouseState();
 	cam->setMouseState(mstate);
 
-	m_device->clearRenderTarget(ERenderTarget::RT_BACK_BUFFER);
+	m_device->clearBackBuffer();
 	//if (m_render)
 	//{
 	//	//printf("FPS: %d\n", m_render->getFps());

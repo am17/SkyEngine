@@ -69,12 +69,12 @@ void Ocean::init()
 	_renderData->addConstantBuffer(constantBuffer4);
 
 	Texture *perlin_noise = _pDevice->createTextureFromFile(L"Textures/perlin_noise.dds");
-	Texture *fresnelMap = _pDevice->createFresnelMap();
+	//Texture *fresnelMap = _pDevice->createFresnelMap();
 	Texture *reflect_cube = _pDevice->createTextureFromFile(L"Textures/skymap_reflect.dds");
 	Texture *gradient_map = _pDevice->createTextureFromFile(L"Textures/gradient_map.dds");
 
 	_renderData->addTexture(perlin_noise);
-	_renderData->addTexture(fresnelMap);
+	//_renderData->addTexture(fresnelMap);
 	_renderData->addTexture(reflect_cube);
 	_renderData->addTexture(gradient_map);
 

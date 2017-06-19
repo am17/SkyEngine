@@ -85,7 +85,7 @@ public:
 
 			_pDevice->setRepeatMaxAnisoSampler(sky::EShaderType::STPixel, 0);
 
-			_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
+			_pDevice->setBackBufferAsRenderTarget();
 
 			unsigned int indexCount = ib->getIndexCount();
 

@@ -18,7 +18,7 @@ public:
 		{
 			RenderPass *pass = data->getRenderPass(i);
 
-			_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
+			_pDevice->setBackBufferAsRenderTarget();
 
 			_pDevice->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLELIST);
 
@@ -33,11 +33,11 @@ public:
 
 			pass->apply();
 
-			Texture *texture = _pDevice->getDepthMap();// data->getTexture(0);
+			//Texture *texture = _pDevice->getDepthMap();// data->getTexture(0);
 
 			//texture->saveToFile(L"_DepthMap.dds");
 
-			texture->bind(sky::EShaderType::STPixel, 0);
+			//texture->bind(sky::EShaderType::STPixel, 0);
 
 			unsigned int indexCount = ib->getIndexCount();
 

@@ -22,16 +22,14 @@ public:
 	InputLayout* createInputLayout(VertexLayoutDesc *layoutDesc, const unsigned int layoutDescLength, const void* pByteCode, size_t ByteCodeLength);
 	ConstantBuffer* createConstantBuffer(unsigned int bufferSize, EConstantBufferType type);
 	Texture* createTextureFromFile(wchar_t* filename);
-	Texture* createFresnelMap();
-	SKYENGINEDLL void clearRenderTarget(ERenderTarget renderTarget);
-	SKYENGINEDLL Texture* getDepthMap();
+	Texture* createTexture2D(unsigned int width, unsigned int height, const void* data, bool createRenderTarget, unsigned int multiSampleCount = 1, unsigned int multiSampleQuality = 0);
 	SKYENGINEDLL void setPrimitiveTopology(PRIMITIVE_TOPOLOGY primitiveType);
 	SKYENGINEDLL void setRepeatMaxAnisoSampler(sky::EShaderType shaderType, unsigned int slot);
 	SKYENGINEDLL void setClampLinearSampler(sky::EShaderType shaderType, unsigned int slot);
 	SKYENGINEDLL void setBackFaceCulling(bool cullBackFace = true);
 	SKYENGINEDLL void setDepthState(sky::EDepthState depthState);
 	SKYENGINEDLL void setBlendState(sky::EBlendState blendState);
-	SKYENGINEDLL void setRenderTarget(ERenderTarget renderTarget);
+	SKYENGINEDLL void setBackBufferAsRenderTarget();
 	SKYENGINEDLL void draw(unsigned int vertexCount, unsigned int startVertexIndex = 0);
 	SKYENGINEDLL void drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation);
 	SKYENGINEDLL void drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation);

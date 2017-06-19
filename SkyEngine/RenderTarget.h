@@ -1,6 +1,10 @@
 #pragma once
 
-enum class ERenderTarget
+class RenderTarget
 {
-	RT_BACK_BUFFER = 0
+public:
+	RenderTarget() {}
+	virtual ~RenderTarget() {}
+private:
+
 };

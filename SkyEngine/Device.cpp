@@ -80,21 +80,11 @@ Texture* Device::createTextureFromFile(wchar_t* filename)
 	return texture;
 }
 
-Texture* Device::createFresnelMap()
+Texture * Device::createTexture2D(unsigned int width, unsigned int height, const void * data, bool createRenderTarget, unsigned int multiSampleCount, unsigned int multiSampleQuality)
 {
-	Texture *texture = _pDeviceImpl->createFresnelMap();
+	Texture *texture = _pDeviceImpl->createTexture2D(width, height, data, createRenderTarget, multiSampleCount, multiSampleQuality);
 
 	return texture;
-}
-
-void Device::clearRenderTarget(ERenderTarget renderTarget)
-{
-	_pDeviceImpl->clearRenderTarget(renderTarget);
-}
-
-Texture* Device::getDepthMap()
-{
-	return _pDeviceImpl->getDepthMap();
 }
 
 void Device::setPrimitiveTopology(PRIMITIVE_TOPOLOGY primitiveType)
@@ -126,9 +116,9 @@ void Device::setBlendState(sky::EBlendState blendState)
 	_pDeviceImpl->setBlendState(blendState);
 }
 
-void Device::setRenderTarget(ERenderTarget renderTarget)
+void Device::setBackBufferAsRenderTarget()
 {
-	_pDeviceImpl->setRenderTarget(renderTarget);
+	_pDeviceImpl->setBackBufferAsRenderTarget();
 }
 
 void Device::draw(unsigned int vertexCount, unsigned int startVertexIndex)

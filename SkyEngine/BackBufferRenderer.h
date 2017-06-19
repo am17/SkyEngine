@@ -33,7 +33,7 @@ public:
 	}
 	virtual void render(RenderData *data) override
 	{
-		_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
+		_pDevice->setBackBufferAsRenderTarget();
 
 		_pDevice->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLESTRIP);
 

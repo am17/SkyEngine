@@ -22,20 +22,17 @@ public:
 	InputLayout* createInputLayout(VertexLayoutDesc *layoutDesc, const unsigned int layoutDescLength, const void* pByteCode, size_t ByteCodeLength) override;
 	ConstantBuffer* createConstantBuffer(unsigned int bufferSize, EConstantBufferType type) override;
 	Texture* createTextureFromFile(wchar_t* filename) override;
-	Texture* createFresnelMap() override;
+	Texture* createTexture2D(unsigned int width, unsigned int height, const void* data, bool createRenderTarget, unsigned int multiSampleCount = 1, unsigned int multiSampleQuality = 0) override;
 	void setPrimitiveTopology(PRIMITIVE_TOPOLOGY primitiveType) override;
 	void setRepeatMaxAnisoSampler(sky::EShaderType shaderType, unsigned int slot) override;
 	void setClampLinearSampler(sky::EShaderType shaderType, unsigned int slot) override;
 	void setBackFaceCulling(bool cullBackFace) override;
 	void setDepthState(sky::EDepthState depthState) override;
 	void setBlendState(sky::EBlendState blendState) override;
-	void clearRenderTarget(ERenderTarget renderTarget) override;
-	void setRenderTarget(ERenderTarget renderTarget) override;
-	Texture *getDepthMap() const override;
+	void setBackBufferAsRenderTarget() override;
 	void draw(unsigned int vertexCount, unsigned int startVertexIndex) override;
 	void drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation) override;
 	void drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation) override;
-	void resolveTexture(Texture* texture) override;
 
 	struct DispayModeRational
 	{
@@ -84,14 +81,7 @@ private:
 	int m_screenWidth;
 	int m_screenHeight;
 	bool m_vsync_enabled;
-
-	ERenderTarget _currentRenderTarget;
 	sky::EDepthState _currentDepthState;
-
-	ID3D11ShaderResourceView * _depthMapTexture;
-	Texture *_depthMap;
-
-
 
 	//ID3D11RenderTargetView* currentRenderTargets[D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT];
 

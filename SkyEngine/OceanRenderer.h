@@ -56,7 +56,7 @@ void OceanRenderer::render(RenderData *data)
 	{
 		RenderPass *pass = data->getRenderPass(i);
 
-		_pDevice->setRenderTarget(ERenderTarget::RT_BACK_BUFFER);
+		_pDevice->setBackBufferAsRenderTarget();
 
 		data->getInputLayout()->bind();
 
@@ -74,7 +74,7 @@ void OceanRenderer::render(RenderData *data)
 		data->getTexture(1)->bind(sky::EShaderType::STPixel, 1);
 		data->getTexture(2)->bind(sky::EShaderType::STPixel, 2);
 		data->getTexture(3)->bind(sky::EShaderType::STPixel, 3);
-		_pDevice->getDepthMap()->bind(sky::EShaderType::STPixel, 4);
+		//_pDevice->getDepthMap()->bind(sky::EShaderType::STPixel, 4);
 
 		//Texture *depthMap = _pDevice->getDepthMap();
 

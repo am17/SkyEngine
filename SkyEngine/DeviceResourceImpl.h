@@ -73,11 +73,11 @@ public:
 	virtual ~ITextureImpl(){}
 	virtual bool createFromFile(wchar_t* filename) = 0;
 	virtual bool createTexture1D(unsigned int width, const void* data) = 0;
-	virtual bool createTexture2D(unsigned int width, unsigned int height, const void* data) = 0;
+	virtual bool createTexture2D(unsigned int width, unsigned int height, const void* data, bool createRenderTarget, unsigned int multiSampleCount = 1, unsigned int multiSampleQuality = 0) = 0;
 	virtual void bind(sky::EShaderType shaderType, unsigned int startSlot) = 0;
 	virtual void unbind(sky::EShaderType shaderType, unsigned int startSlot) = 0;
 	virtual void saveToFile(const wchar_t* fileName) = 0;
-	virtual void resolve() = 0;
+	virtual void bindAsRenderTarget() = 0;
 };
 
 class IRenderTargetImpl

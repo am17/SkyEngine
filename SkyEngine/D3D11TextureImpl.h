@@ -100,7 +100,7 @@ public:
 			return false;
 		}
 	}
-	bool createTexture2D(unsigned int width, unsigned int height, const void* data)
+	bool createTexture2D(unsigned int width, unsigned int height, const void* data, bool createRenderTarget, unsigned int multiSampleCount = 1, unsigned int multiSampleQuality = 0)
 	{
 		ID3D11Texture2D* pTexture = nullptr;
 
@@ -111,7 +111,8 @@ public:
 		textureDesc.MipLevels = 1;
 		textureDesc.ArraySize = 1;
 		textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-		textureDesc.SampleDesc.Count = 1;
+		textureDesc.SampleDesc.Count = multiSampleCount;
+		textureDesc.SampleDesc.Quality = multiSampleQuality;
 		textureDesc.Usage = D3D11_USAGE_DEFAULT;
 		textureDesc.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
 		textureDesc.CPUAccessFlags = 0;
@@ -148,6 +149,11 @@ public:
 		{
 			printf("createTexture2D error\n");
 			return false;
+		}
+
+		if (createRenderTarget)
+		{
+			_pDevice->CreateRenderTargetView(pTexture, nullptr, &_pRenderTarget);
 		}
 	}
 	void bind(sky::EShaderType shaderType, unsigned int startSlot) override
@@ -204,18 +210,18 @@ public:
 			break;
 		}
 	}
+	void bindAsRenderTarget() override
+	{
+		assert(_pRenderTarget);
+
+		//_pDeviceContext->OMSetRenderTargets(1, &_pRenderTarget, main_depth_resourceDSV);
+		_pDeviceContext->OMSetRenderTargets(1, &_pRenderTarget, nullptr);
+	}
 	void saveToFile(const wchar_t* fileName)
 	{
 		ID3D11Resource* pSource = nullptr;
 		_pTextureView->GetResource(&pSource);
 		SaveDDSTextureToFile(_pDeviceContext, pSource, fileName);
-	}
-	void resolve() override
-	{
-		ID3D11Resource *pDstResource = nullptr;
-		ID3D11Resource *pSrcResource = nullptr;
-
-		_pDeviceContext->ResolveSubresource(pDstResource, 0, pSrcResource, 0, DXGI_FORMAT_R8G8B8A8_UNORM);
 	}
 private:
 	ID3D11ShaderResourceView* _pTextureView;
