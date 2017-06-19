@@ -38,7 +38,8 @@ public:
 		_pDevice->setPrimitiveTopology(PRIMITIVE_TOPOLOGY::TRIANGLESTRIP);
 
 		_pDevice->setBackFaceCulling(false);
-		_pDevice->setDepthState(sky::EDepthState::DS_DEFAULT);
+		_pDevice->setDepthState(sky::EDepthState::DS_LESS_EQUAL);
+		_pDevice->setBlendState(sky::EBlendState::BS_NO_BLENDING);
 
 		_pass->apply();
 

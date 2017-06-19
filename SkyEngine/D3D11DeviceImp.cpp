@@ -32,7 +32,9 @@ D3D11DeviceImpl::D3D11DeviceImpl()
 	//m_timer(nullptr),
 	m_screenWidth(0),
 	m_screenHeight(0),
-	m_backBufferRenderTarget(nullptr)
+	m_backBufferRenderTarget(nullptr),
+	m_noBlendState(nullptr),
+	m_blendAddState(nullptr)
 	//_depthMapRenderTarget(nullptr)
 	//m_currentState(nullptr)
 {
@@ -65,6 +67,18 @@ D3D11DeviceImpl::~D3D11DeviceImpl()
 	{
 		m_backBufferRenderTarget->Release();
 		m_backBufferRenderTarget = nullptr;
+	}
+
+	if (m_blendAddState)
+	{
+		m_blendAddState->Release();
+		m_blendAddState = nullptr;
+	}
+
+	if (m_noBlendState)
+	{
+		m_noBlendState->Release();
+		m_noBlendState = nullptr;
 	}
 
 	if (m_alphaBlendState)
@@ -495,20 +509,37 @@ void D3D11DeviceImpl::createBlendStates()
 
 	rtbd.BlendEnable = true;//Enable blending.
 
-	rtbd.SrcBlend = D3D11_BLEND_SRC_ALPHA;//
-	rtbd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;//
-	rtbd.BlendOp = D3D11_BLEND_OP_ADD;//
+	rtbd.SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	rtbd.DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	rtbd.BlendOp = D3D11_BLEND_OP_ADD;
 
-	rtbd.SrcBlendAlpha = D3D11_BLEND_ZERO;//
-	rtbd.DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;//
-	rtbd.BlendOpAlpha = D3D11_BLEND_OP_ADD;//
+	rtbd.SrcBlendAlpha = D3D11_BLEND_ZERO;
+	rtbd.DestBlendAlpha = D3D11_BLEND_DEST_ALPHA;
+	rtbd.BlendOpAlpha = D3D11_BLEND_OP_ADD;
 
-	rtbd.RenderTargetWriteMask = D3D10_COLOR_WRITE_ENABLE_ALL;//
+	rtbd.RenderTargetWriteMask = D3D10_COLOR_WRITE_ENABLE_ALL;
 
 	blendDesc.AlphaToCoverageEnable = false;
 	blendDesc.RenderTarget[0] = rtbd;
 
 	m_device->CreateBlendState(&blendDesc, &m_alphaBlendState);
+
+	rtbd.BlendEnable = true;
+	rtbd.SrcBlend = D3D11_BLEND_ONE;
+	rtbd.DestBlend = D3D11_BLEND_ONE;
+	blendDesc.RenderTarget[0] = rtbd;
+	m_device->CreateBlendState(&blendDesc, &m_blendAddState);
+
+
+	const D3D11_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
+	{
+		FALSE,
+		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
+		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
+		D3D11_COLOR_WRITE_ENABLE_ALL,
+	};
+	blendDesc.RenderTarget[0] = defaultRenderTargetBlendDesc;
+	m_device->CreateBlendState(&blendDesc, &m_noBlendState);
 }
 
 bool D3D11DeviceImpl::fillVideoCardDescription(IDXGIAdapter* adapter)
@@ -884,6 +915,18 @@ void D3D11DeviceImpl::setBlendState(sky::EBlendState blendState)
 			m_deviceContext->OMSetBlendState(m_alphaBlendState, blendFactor, 0xffffffff);
 		}
 		break;
+	case sky::EBlendState::BS_NO_BLENDING:
+		{
+			float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+			m_deviceContext->OMSetBlendState(m_noBlendState, blendFactor, 0xffffffff);
+		}
+		break;
+	case sky::EBlendState::BS_BLENDING_ADD:
+		{
+			float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
+			m_deviceContext->OMSetBlendState(m_blendAddState, blendFactor, 0xffffffff);
+		}
+		break;
 	default:
 		break;
 	}
@@ -943,6 +986,14 @@ void D3D11DeviceImpl::drawIndexed(unsigned int IndexCount, unsigned int StartInd
 void D3D11DeviceImpl::drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation)
 {
 	m_deviceContext->DrawIndexedInstanced(indexCountPerInstance, instanceCount, startIndexLocation, baseVertexLocation, startInstanceLocation);
+}
+
+void D3D11DeviceImpl::resolveTexture(Texture * texture)
+{
+	ID3D11Resource *pDstResource = nullptr;
+	ID3D11Resource *pSrcResource = nullptr;
+
+	m_deviceContext->ResolveSubresource(pDstResource, 0, pSrcResource, 0, DXGI_FORMAT_R8G8B8A8_UNORM);
 }
 
 void D3D11DeviceImpl::testScene()

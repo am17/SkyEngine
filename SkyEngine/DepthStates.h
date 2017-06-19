@@ -12,6 +12,8 @@ namespace sky
 	enum class EBlendState
 	{
 		BS_OPAQUE = 0,
-		BS_ALPHA_BLENDING = 1
+		BS_ALPHA_BLENDING = 1,
+		BS_NO_BLENDING = 2,
+		BS_BLENDING_ADD = 3
 	};
 }

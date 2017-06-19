@@ -77,6 +77,7 @@ public:
 	virtual void bind(sky::EShaderType shaderType, unsigned int startSlot) = 0;
 	virtual void unbind(sky::EShaderType shaderType, unsigned int startSlot) = 0;
 	virtual void saveToFile(const wchar_t* fileName) = 0;
+	virtual void resolve() = 0;
 };
 
 class IRenderTargetImpl

@@ -11,6 +11,7 @@ public:
 	SKYENGINEDLL void saveToFile(const wchar_t* fileName);
 	SKYENGINEDLL void saveToFile();
 	SKYENGINEDLL void bind(sky::EShaderType shaderType, unsigned int startSlot = 0);
+	void resolve();
 private:
 	ITextureImpl *_impl;
 };

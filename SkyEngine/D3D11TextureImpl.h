@@ -210,6 +210,13 @@ public:
 		_pTextureView->GetResource(&pSource);
 		SaveDDSTextureToFile(_pDeviceContext, pSource, fileName);
 	}
+	void resolve() override
+	{
+		ID3D11Resource *pDstResource = nullptr;
+		ID3D11Resource *pSrcResource = nullptr;
+
+		_pDeviceContext->ResolveSubresource(pDstResource, 0, pSrcResource, 0, DXGI_FORMAT_R8G8B8A8_UNORM);
+	}
 private:
 	ID3D11ShaderResourceView* _pTextureView;
 	ID3D11Device* _pDevice;

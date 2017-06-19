@@ -35,6 +35,7 @@ public:
 	void draw(unsigned int vertexCount, unsigned int startVertexIndex) override;
 	void drawIndexed(unsigned int IndexCount, unsigned int StartIndexLocation, int  BaseVertexLocation) override;
 	void drawIndexedInstanced(unsigned int indexCountPerInstance, unsigned int instanceCount, unsigned int startIndexLocation, int  baseVertexLocation, unsigned int startInstanceLocation) override;
+	void resolveTexture(Texture* texture) override;
 
 	struct DispayModeRational
 	{
@@ -73,6 +74,8 @@ private:
 	ID3D11SamplerState* m_samplerRepeatMaxAniso;
 	ID3D11SamplerState* m_samplerClampLinear;
 	ID3D11BlendState* m_alphaBlendState;
+	ID3D11BlendState* m_noBlendState;
+	ID3D11BlendState* m_blendAddState;
 	//ID3D11RenderTargetView *_depthMapRenderTarget;
 
 	char* m_cardName;
