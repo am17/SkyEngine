@@ -2,13 +2,8 @@
 #define WIN32_LEAN_AND_MEAN
 
 #include <windows.h>
-#include "Scene.h"
-#include "Device.h"
-#include "BaseEntityFactory.h"
-//#include "Render.h"
-#include "DirectInputHadler.h"
 
-using namespace sky;
+//using namespace sky;
 //using namespace scene;
 
 class SystemClass
@@ -34,13 +29,6 @@ private:
 	LPCWSTR m_applicationName;
 	HINSTANCE m_hinstance;
 	HWND m_hwnd;
-
-	Scene *m_scene;
-	Device *m_device;
-	BaseEntityFactory *m_efactory;
-	//Render *m_render;
-
-	DirectInputHandler *inputHandler;
 };
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);

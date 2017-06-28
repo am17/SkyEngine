@@ -1,8 +1,5 @@
 #include "SystemClass.h"
 #include <iostream>
-#include "Terrain.h"
-#include "Skybox.h"
-#include "Ocean.h"
 
 using namespace std;
 
@@ -16,11 +13,7 @@ using namespace std;
 SystemClass::SystemClass()
 	: m_applicationName(nullptr), 
 	m_hinstance(nullptr), 
-	m_hwnd(nullptr), 
-	m_scene(nullptr),
-	m_device(nullptr),
-	m_efactory(nullptr)
-	//m_render(nullptr)
+	m_hwnd(nullptr)
 {
 
 }
@@ -31,11 +24,6 @@ SystemClass::SystemClass(const SystemClass& other)
 
 SystemClass::~SystemClass()
 {
-	if (inputHandler)
-	{
-		delete inputHandler;
-		inputHandler = nullptr;
-	}
 }
 
 bool SystemClass::Initialize()
@@ -51,131 +39,11 @@ bool SystemClass::Initialize()
 	// Initialize the windows api.
 	InitializeWindows(screenWidth, screenHeight);
 
-	inputHandler = new DirectInputHandler(m_hinstance, m_hwnd);
-
-	m_device = new Device();
-	m_device->init(m_hwnd, screenWidth, screenHeight, false);
-
-	//m_render = new Render();
-
-	//m_render->initDevice(m_hwnd, screenWidth, screenHeight, false);
-
-	m_scene = new Scene();
-	m_scene->init(m_device);
-
-	m_scene->getCamera()->setPosition(786, 167, -301);
-	//m_scene->init(m_render);
-
-	m_efactory = new BaseEntityFactory(m_device);
-
-	/*Entity* entity = m_efactory->createTeapotEntity();
-	m_scene->add(entity);*/
-
-	//Entity* terrainEntity = m_efactory->createEntity();
-
-	Camera *cam = m_scene->getCamera();
-
-	//Terrain* terrain = new Terrain(m_device, terrainEntity, cam);
-	//terrain->init();
-
-	//m_scene->add(terrain);
-
-	//Entity* sphere = m_efactory->createGeoSphereEntity();
-
-	//Skybox *sky = new Skybox(m_device, sphere, cam);
-
-	//m_scene->add(sky);
-
-	//Entity* oceanEntity = m_efactory->createEntity();
-
-	//Ocean *ocean = new Ocean(m_device, oceanEntity, cam);
-	//ocean->init();
-
-	//m_scene->add(ocean);
-
-	//Entity* debugQuad = m_efactory->createQuadEntity();
-	//m_scene->add(debugQuad);
-
-	//cam->setPosition(-441.0f, -10.0f, -489.0f);
-	//cam->setPosition(-540.0f, -94.0f, -498.0f);
-	//cam->setRotation(-1.6024, -3.14, 0);
-
-	ICommand *wCommand = new SimpleCommand<Camera>(cam, &Camera::moveForward);
-	ICommand *sCommand = new SimpleCommand<Camera>(cam, &Camera::moveBackward);
-	ICommand *rmCommand = new SimpleCommand<Camera>(cam, &Camera::rotate);
-
-	//ICommand *leftCommand = new SimpleCommand<ICamera>(cam, &ICamera::stepRotateLeft);
-	//ICommand *rightCommand = new SimpleCommand<ICamera>(cam, &ICamera::stepRotateRight);
-	//ICommand *upCommand = new SimpleCommand<ICamera>(cam, &ICamera::stepUp);
-	//ICommand *downCommand = new SimpleCommand<ICamera>(cam, &ICamera::stepDown);
-	//ICommand *rotateUpCommand = new SimpleCommand<ICamera>(cam, &ICamera::stepRotateUp);
-	//ICommand *rotateDownCommand = new SimpleCommand<ICamera>(cam, &ICamera::stepRotateDown);
-	//
-	inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_W, wCommand);
-	inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_S, sCommand);
-	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_A, leftCommand);
-	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_D, rightCommand);
-	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWUP, wCommand);
-	inputHandler->bindMouseCommand(EMOUSE_COMMAND::EMC_RIGHTBNT, rmCommand);
-	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWLEFT, upCommand);
-	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWRIGHT, downCommand);
-
-	//Texture* depthMap = m_device->getDepthMap();
-	//ICommand *saveScreenCommand = new SimpleCommand<Texture>(depthMap, &Texture::saveToFile);
-	//inputHandler->bindKeyCommand(EKEYBOARD_COMMAND::EKC_ARROWUP, saveScreenCommand);
-
-	//Entity *cube = m_scene->addEntity(EBASIC_ENTITY::ENTITY_BOX);
-	//cube->setScale(4.0f, 2.0f, 4.0f);
-	//cube->getMesh()->getMaterial(0)->setVertexShader(EVertexShader::VS_SPECULAR_MAPPING);
-	//cube->getMesh()->getMaterial(0)->setPixelShader(EPixelShader::PS_SPECULAR_MAPPING);
-	//cube->getMesh()->getMaterial(0)->setTexture(L"Textures/stone02.dds", 0, ETEXTURE_MAP_TYPE::TYPE_DEFFUSE_MAP);
-	//cube->getMesh()->getMaterial(0)->setTexture(L"Textures/bump02.dds", 1, ETEXTURE_MAP_TYPE::TYPE_NORMAL_MAP);
-	//cube->getMesh()->getMaterial(0)->setTexture(L"Textures/spec02.dds", 2, ETEXTURE_MAP_TYPE::TYPE_SPECULAR_MAP);
-
-	//Behavior *beh = new Behavior();
-	//Entity *teapot = m_scene->addEntity(EBASIC_ENTITY::ENTITY_TEAPOT);
-	//teapot->setPosition(0, 1.3, 0);
-	//teapot->getMesh()->getMaterial(0)->setTexture(L"Textures/Texture2.dds", 0);
-	//teapot->setBehavior(beh);
-
-	//TerrainEntity *terrain = m_scene->addTerrainEntity("Data/heightmap.r16", 1025, 1025);
-	//TerrainEntity *terrain = m_scene->addTerrainEntity("Textures/heightmap.bmp", 257, 257);
-	//terrain->getMesh()->getMaterial(0)->setTexture(L"Textures/grass.dds", 0);
-	//terrain->getMesh()->getMaterial(0)->setTexture(L"Textures/bump01.dds", 1);
-	//terrain->setPosition(-512, -100, -512);
-	//terrain->setScale(0.001,0.001,0.001);
-
-	//m_scene->addSky();
-
 	return true;
 }
 
 void SystemClass::Shutdown()
 {
-	/*if (m_render)
-	{
-		delete m_render;
-		m_render = nullptr;
-	}*/
-
-	if (m_efactory)
-	{
-		delete m_efactory;
-		m_efactory = nullptr;
-	}
-
-	if (m_device)
-	{
-		delete m_device;
-		m_device = nullptr;
-	}
-
-	if (m_scene)
-	{
-		delete m_scene;
-		m_scene = nullptr;
-	}
-
 	// Shutdown the window.
 	ShutdownWindows();
 
@@ -210,7 +78,6 @@ void SystemClass::Run()
 		}
 		else
 		{
-			inputHandler->handleInput();
 			result = Frame();
 			if (!result)
 			{
@@ -225,23 +92,6 @@ void SystemClass::Run()
 
 bool SystemClass::Frame() const
 {
-	Camera *cam = m_scene->getCamera();
-	DIMOUSESTATE& mstate = inputHandler->getMouseState();
-	cam->setMouseState(mstate);
-
-	m_device->clearBackBuffer();
-	//if (m_render)
-	//{
-	//	//printf("FPS: %d\n", m_render->getFps());
-
-		m_scene->update();
-
-	//	m_scene->draw();
-	//}
-	m_device->present();
-
-	//printf("cam: %f %f %f %\n", cam->getPosition().x, cam->getPosition().y, cam->getPosition().z);
-
 	return true;
 }
 
