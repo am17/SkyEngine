@@ -12,7 +12,12 @@
 #include <windows.h>
 #include <cassert>
 
+#include <wrl/client.h>
 
+#include <algorithm>
+#include <exception>
+#include <memory>
+#include <stdexcept>
 
 // TODO: reference additional headers your program requires here
 //#ifdef _DEBUG
