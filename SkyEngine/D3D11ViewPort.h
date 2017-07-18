@@ -16,6 +16,7 @@ public:
 	bool Init(HWND ouputWindow, bool IsFullscreen = false);
 	void Clear();
 	void Present(int SyncInterval = 0);
+	void RenderToBackBuffer();
 private:
 	shared_ptr<IDeviceImpl> mDevice;
 	int mOutputWidth;

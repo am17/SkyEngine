@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "D3D11Device.h"
+#include "D3D11Shader.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -118,4 +119,61 @@ void *D3D11Device::CreateTexture2D(unsigned int width, unsigned int height, cons
 	if (FAILED(result)) return nullptr;
 
 	return TextureResource.Get();
+}
+
+VertexShader * D3D11Device::CreateVertexShader(const void * pByteCode, size_t ByteCodeLength)
+{
+	D3D11VertexShader *shader = new D3D11VertexShader();
+
+	HRESULT hr = mDirect3DDevice->CreateVertexShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	shader->Code = (void*)pByteCode;
+	shader->ByteCodeLength = ByteCodeLength;
+
+	return shader;
+}
+
+HullShader * D3D11Device::CreateHullShader(const void * pByteCode, size_t ByteCodeLength)
+{
+	D3D11HullShader *shader = new D3D11HullShader();
+
+	HRESULT hr = mDirect3DDevice->CreateHullShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	return shader;
+}
+
+DomainShader * D3D11Device::CreateDomainShader(const void * pByteCode, size_t ByteCodeLength)
+{
+	D3D11DomainShader *shader = new D3D11DomainShader();
+
+	HRESULT hr = mDirect3DDevice->CreateDomainShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	return shader;
+}
+
+PixelShader * D3D11Device::CreatePixelShader(const void * pByteCode, size_t ByteCodeLength)
+{
+	D3D11PixelShader *shader = new D3D11PixelShader();
+
+	HRESULT hr = mDirect3DDevice->CreatePixelShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	return shader;
+}
+
+GeometryShader * D3D11Device::CreateGeometryShader(const void * pByteCode, size_t ByteCodeLength)
+{
+	D3D11GeometryShader *shader = new D3D11GeometryShader();
+
+	HRESULT hr = mDirect3DDevice->CreateGeometryShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	return shader;
+}
+
+ComputeShader * D3D11Device::CreateComputeShader(const void * pByteCode, size_t ByteCodeLength)
+{
+	D3D11ComputeShader *shader = new D3D11ComputeShader();
+
+	HRESULT hr = mDirect3DDevice->CreateComputeShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	return shader;
 }

@@ -148,8 +148,12 @@
   <ItemGroup>
     <ClInclude Include="common.h" />
     <ClInclude Include="D3D11Device.h" />
+    <ClInclude Include="D3D11Shader.h" />
     <ClInclude Include="D3D11ViewPort.h" />
     <ClInclude Include="IDeviceImpl.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderFactory.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -157,6 +161,7 @@
     <ClCompile Include="D3D11Device.cpp" />
     <ClCompile Include="D3D11ViewPort.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="ShaderFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -101,3 +101,8 @@ void D3D11ViewPort::Present(int SyncInterval)
 		//DX::ThrowIfFailed(hr);
 	}
 }
+
+void D3D11ViewPort::RenderToBackBuffer()
+{
+	mDeviceContext->Draw(4, 0);
+}

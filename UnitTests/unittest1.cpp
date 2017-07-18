@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include "D3D11Device.h"
+#include "ShaderFactory.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -24,6 +25,15 @@ namespace UnitTests
 			void *texture = device->CreateTexture2D(400, 400, nullptr, true, false);
 
 			Assert::IsNotNull(texture, L"Текстура не создана");
+		}
+
+		TEST_METHOD(ShaderFactoryTest)
+		{
+			IDeviceImpl* device = new D3D11Device();
+			device->Init();
+			
+			ShaderFactory *factory = new ShaderFactory(device);
+			factory->GetShader(L"mainVS", SHADER_TYPE::VERTEX_SHADER, "main");
 		}
 	};
 }
