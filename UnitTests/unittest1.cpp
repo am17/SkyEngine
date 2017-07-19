@@ -32,8 +32,15 @@ namespace UnitTests
 			IDeviceImpl* device = new D3D11Device();
 			device->Init();
 			
-			ShaderFactory *factory = new ShaderFactory(device);
-			factory->GetShader(L"mainVS", SHADER_TYPE::VERTEX_SHADER, "main");
+			ShaderFactory &factory = ShaderFactory::GetInstance(device);
+			ShaderFactory &factory2 = ShaderFactory::GetInstance(device);
+
+			factory.GetShader(L"testVS", SHADER_TYPE::VERTEX_SHADER, "main");
+			factory.GetShader(L"testPS", SHADER_TYPE::PIXEL_SHADER, "main");
+			factory.GetShader(L"testDS", SHADER_TYPE::DOMAIN_SHADER, "main");
+			factory.GetShader(L"testHS", SHADER_TYPE::HULL_SHADER, "main");
+			factory.GetShader(L"testGS", SHADER_TYPE::GEOMETRY_SHADER, "main");
+			factory.GetShader(L"testCS", SHADER_TYPE::COMPUTE_SHADER, "main");
 		}
 	};
 }

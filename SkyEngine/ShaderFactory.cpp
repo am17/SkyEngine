@@ -38,6 +38,16 @@ Shader * ShaderFactory::GetShader(const wchar_t * name, SHADER_TYPE shaderType, 
 	return shader.get();
 }
 
+shared_ptr<ShaderFactory> ShaderFactory::p_instance;
+
+ShaderFactory & ShaderFactory::GetInstance(IDeviceImpl* aDevice)
+{
+	if (!p_instance) {
+		p_instance = make_shared<ShaderFactory>(aDevice);
+	}
+	return *p_instance.get();
+}
+
 Shader * ShaderFactory::CreateShaderFromFile(const wchar_t * filename, SHADER_TYPE shaderType, const char * pEntryPoint)
 {
 	Shader *shader = nullptr;

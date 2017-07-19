@@ -14,6 +14,7 @@ public:
 	ShaderFactory(IDeviceImpl* aDevice);
 	~ShaderFactory();
 	Shader* GetShader(const wchar_t* name, SHADER_TYPE shaderType, const char* pEntryPoint = "main");
+	static ShaderFactory& GetInstance(IDeviceImpl* aDevice);
 private:
 	Shader *CreateShaderFromFile(const wchar_t* filename, SHADER_TYPE shaderType, const char* pEntryPoint);
 	ID3D10Blob* CompileShader(const wchar_t * filename, const char * pEntryPoint, const char* pTarget);
@@ -21,5 +22,7 @@ private:
 
 	IDeviceImpl* mDevice;
 	unordered_map<const wchar_t*, shared_ptr<Shader>> mShaderCache;
+
+	static shared_ptr<ShaderFactory> p_instance;
 };
 

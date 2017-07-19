@@ -82,7 +82,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\mainVS.hlsl">
+    <FxCompile Include="mainVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="mainPS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>
