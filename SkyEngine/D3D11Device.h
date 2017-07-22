@@ -20,7 +20,12 @@ public:
 	PixelShader* CreatePixelShader(const void* pByteCode, size_t ByteCodeLength) override;
 	GeometryShader* CreateGeometryShader(const void* pByteCode, size_t ByteCodeLength) override;
 	ComputeShader* CreateComputeShader(const void* pByteCode, size_t ByteCodeLength) override;
+	SamplerState* CreateSamplerState(const SamplerStateDesc& Initializer) override;
+	ConstantBuffer* CreateConstantBuffer(unsigned int BufferSize) override;
 private:
+	D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode);
+	D3D11_COMPARISON_FUNC ConvertCompareFunction(COMPARISON_FUNCTION ComparisonFunction);
+
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> mD3DDeviceIMContext;
 	Microsoft::WRL::ComPtr<ID3D11Device> mDirect3DDevice;
 	Microsoft::WRL::ComPtr<IDXGIFactory1> mDXGIFactory;

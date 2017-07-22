@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include "Shader.h"
+#include "SamplerStateDesc.h"
+#include "ConstantBuffer.h"
 
 class IDeviceImpl
 {
@@ -14,4 +16,6 @@ public:
 	virtual PixelShader* CreatePixelShader(const void* pByteCode, size_t ByteCodeLength) = 0;
 	virtual GeometryShader* CreateGeometryShader(const void* pByteCode, size_t ByteCodeLength) = 0;
 	virtual ComputeShader* CreateComputeShader(const void* pByteCode, size_t ByteCodeLength) = 0;
+	virtual SamplerState* CreateSamplerState(const SamplerStateDesc& Initializer) = 0;
+	virtual ConstantBuffer* CreateConstantBuffer(unsigned int BufferSize) = 0;
 };

@@ -6,3 +6,5 @@ public:
 	Resource() {}
 	virtual ~Resource() {}
 };
+
+class SamplerState : public Resource {};

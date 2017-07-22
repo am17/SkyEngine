@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "D3D11Device.h"
 #include "D3D11Shader.h"
+#include "D3D11SamplerState.h"
+#include "D3D11ConstantBuffer.h"
+#include "D3D11ConstantBuffer.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -106,6 +109,8 @@ void *D3D11Device::CreateTexture2D(unsigned int width, unsigned int height, cons
 	HRESULT result = mDirect3DDevice->CreateTexture2D(&textureDesc, 0, TextureResource.ReleaseAndGetAddressOf());
 	result = mDirect3DDevice->CreateShaderResourceView(TextureResource.Get(), &textureSRV_desc, textureSRV.ReleaseAndGetAddressOf());
 	
+	assert(SUCCEEDED(result));
+
 	if (createDSV)
 	{
 		result = mDirect3DDevice->CreateDepthStencilView(TextureResource.Get(), &DSVDesc, textureDSV.ReleaseAndGetAddressOf());
@@ -116,7 +121,7 @@ void *D3D11Device::CreateTexture2D(unsigned int width, unsigned int height, cons
 		result = mDirect3DDevice->CreateRenderTargetView(TextureResource.Get(), nullptr, textureRTV.ReleaseAndGetAddressOf());
 	}
 
-	if (FAILED(result)) return nullptr;
+	assert(SUCCEEDED(result));
 
 	return TextureResource.Get();
 }
@@ -126,6 +131,8 @@ VertexShader * D3D11Device::CreateVertexShader(const void * pByteCode, size_t By
 	D3D11VertexShader *shader = new D3D11VertexShader();
 
 	HRESULT hr = mDirect3DDevice->CreateVertexShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
 
 	shader->Code = (void*)pByteCode;
 	shader->ByteCodeLength = ByteCodeLength;
@@ -139,6 +146,8 @@ HullShader * D3D11Device::CreateHullShader(const void * pByteCode, size_t ByteCo
 
 	HRESULT hr = mDirect3DDevice->CreateHullShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
 
+	assert(SUCCEEDED(hr));
+
 	return shader;
 }
 
@@ -147,6 +156,8 @@ DomainShader * D3D11Device::CreateDomainShader(const void * pByteCode, size_t By
 	D3D11DomainShader *shader = new D3D11DomainShader();
 
 	HRESULT hr = mDirect3DDevice->CreateDomainShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
 
 	return shader;
 }
@@ -157,6 +168,8 @@ PixelShader * D3D11Device::CreatePixelShader(const void * pByteCode, size_t Byte
 
 	HRESULT hr = mDirect3DDevice->CreatePixelShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
 
+	assert(SUCCEEDED(hr));
+
 	return shader;
 }
 
@@ -165,6 +178,8 @@ GeometryShader * D3D11Device::CreateGeometryShader(const void * pByteCode, size_
 	D3D11GeometryShader *shader = new D3D11GeometryShader();
 
 	HRESULT hr = mDirect3DDevice->CreateGeometryShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
 
 	return shader;
 }
@@ -175,5 +190,126 @@ ComputeShader * D3D11Device::CreateComputeShader(const void * pByteCode, size_t 
 
 	HRESULT hr = mDirect3DDevice->CreateComputeShader(pByteCode, ByteCodeLength, nullptr, shader->Resource.ReleaseAndGetAddressOf());
 
+	assert(SUCCEEDED(hr));
+
 	return shader;
+}
+
+SamplerState * D3D11Device::CreateSamplerState(const SamplerStateDesc& Initializer)
+{
+	D3D11_SAMPLER_DESC SamplerDesc;
+	ZeroMemory(&SamplerDesc, sizeof(D3D11_SAMPLER_DESC));
+
+	SamplerDesc.AddressU = ConvertAddressMode(Initializer.TextureAddress);;
+	SamplerDesc.AddressV = ConvertAddressMode(Initializer.TextureAddress);;
+	SamplerDesc.AddressW = ConvertAddressMode(Initializer.TextureAddress);;
+	SamplerDesc.ComparisonFunc = ConvertCompareFunction(Initializer.ComparisonFunction);;
+	SamplerDesc.MinLOD = 0;
+	SamplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	SamplerDesc.BorderColor[0] = 1;
+	SamplerDesc.BorderColor[1] = 1;
+	SamplerDesc.BorderColor[2] = 1;
+	SamplerDesc.BorderColor[3] = 1;
+	SamplerDesc.MaxAnisotropy = Initializer.MaxAnisotropy;
+
+	const bool bComparisonEnabled = Initializer.ComparisonFunction != COMPARISON_FUNCTION::NEVER;
+
+	switch (Initializer.Filter)
+	{
+	case TEXTURE_FILTER::ANISOTROPIC:
+		{
+			if (SamplerDesc.MaxAnisotropy == 1)
+			{
+				SamplerDesc.Filter = bComparisonEnabled ? D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR : D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+			}
+			else
+			{
+				SamplerDesc.Filter = bComparisonEnabled ? D3D11_FILTER_COMPARISON_ANISOTROPIC : D3D11_FILTER_ANISOTROPIC;
+			}
+		}
+		break;
+	case TEXTURE_FILTER::LINEAR:
+		SamplerDesc.Filter = bComparisonEnabled ? D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR : D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		break;
+	case TEXTURE_FILTER::POINT:
+		SamplerDesc.Filter = bComparisonEnabled ? D3D11_FILTER_COMPARISON_MIN_MAG_MIP_POINT : D3D11_FILTER_MIN_MAG_MIP_POINT;
+		break;
+	default:
+		break;
+	}
+
+	Microsoft::WRL::ComPtr<ID3D11SamplerState> SamplerStateHandle;
+
+	//Если такой сэмплер уже был создан, то вернется тот же указатель
+	HRESULT hr = mDirect3DDevice->CreateSamplerState(&SamplerDesc, SamplerStateHandle.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
+
+	D3D11SamplerState* SState = new D3D11SamplerState();
+	SState->Resource = SamplerStateHandle;
+
+	return SState;
+}
+
+ConstantBuffer * D3D11Device::CreateConstantBuffer(unsigned int BufferSize)
+{
+	Microsoft::WRL::ComPtr<ID3D11Buffer> Buffer;
+
+	D3D11_BUFFER_DESC BufferDesc;
+	ZeroMemory(&BufferDesc, sizeof(D3D11_BUFFER_DESC));
+
+	BufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	BufferDesc.ByteWidth = BufferSize;
+	BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	BufferDesc.CPUAccessFlags = 0;
+	BufferDesc.MiscFlags = 0;
+
+	HRESULT hr = mDirect3DDevice->CreateBuffer(&BufferDesc, 0, Buffer.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
+
+	D3D11ConstantBuffer* CBuffer = new D3D11ConstantBuffer(BufferSize);
+	CBuffer->Resource = Buffer;
+
+	return CBuffer;
+}
+
+D3D11_TEXTURE_ADDRESS_MODE D3D11Device::ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode)
+{
+	switch (AddressMode)
+	{
+	case SAMPLER_ADDRESS_MODE::CLAMP:
+		return D3D11_TEXTURE_ADDRESS_CLAMP;
+	case SAMPLER_ADDRESS_MODE::MIRROR:
+		return D3D11_TEXTURE_ADDRESS_MIRROR;
+	case SAMPLER_ADDRESS_MODE::BORDER:
+		return D3D11_TEXTURE_ADDRESS_BORDER;
+	case SAMPLER_ADDRESS_MODE::WRAP:
+	default:
+		return D3D11_TEXTURE_ADDRESS_WRAP;
+	}
+}
+
+D3D11_COMPARISON_FUNC D3D11Device::ConvertCompareFunction(COMPARISON_FUNCTION ComparisonFunction)
+{
+	switch (ComparisonFunction)
+	{
+	case COMPARISON_FUNCTION::ALWAYS:
+		return D3D11_COMPARISON_ALWAYS;
+	case COMPARISON_FUNCTION::LESS:
+		return D3D11_COMPARISON_LESS;
+	case COMPARISON_FUNCTION::LESSEQUAL:
+		return D3D11_COMPARISON_LESS_EQUAL;
+	case COMPARISON_FUNCTION::GREATER:
+		return D3D11_COMPARISON_GREATER;
+	case COMPARISON_FUNCTION::GREATEREQUAL:
+		return D3D11_COMPARISON_GREATER_EQUAL;
+	case COMPARISON_FUNCTION::EQUAL:
+		return D3D11_COMPARISON_EQUAL;
+	case COMPARISON_FUNCTION::NOTEQUAL:
+		return D3D11_COMPARISON_NOT_EQUAL;
+	case COMPARISON_FUNCTION::NEVER:
+	default:
+		return D3D11_COMPARISON_NEVER;
+	}
 }

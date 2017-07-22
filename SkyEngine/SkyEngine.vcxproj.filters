@@ -63,6 +63,18 @@
     <ClInclude Include="ShaderFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D3D11SamplerState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerStateDesc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11ConstantBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
