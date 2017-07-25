@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "D3D11ViewPort.h"
 #include "D3D11Device.h"
+#include "ShaderFactory.h"
 
 D3D11ViewPort::D3D11ViewPort(IDeviceImpl *device, unsigned int width, unsigned int height)
 	:mDevice(device),
@@ -71,6 +72,48 @@ bool D3D11ViewPort::Init(HWND ouputWindow, bool IsFullscreen)
 	CD3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc(D3D11_DSV_DIMENSION_TEXTURE2D);
 	result = direct3DDevice->CreateDepthStencilView(mDepthStencil.Get(), &depthStencilViewDesc, mDepthStencilView.ReleaseAndGetAddressOf());
 
+	ShaderFactory &factory = ShaderFactory::GetInstance(mDevice.get());
+
+	mVertexShader = static_cast<D3D11VertexShader*>(factory.GetShader(L"mainVS", SHADER_TYPE::VERTEX_SHADER, "FullScreenQuadVS"));
+
+	const D3D11_INPUT_ELEMENT_DESC SkyLayout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+	};
+
+	result = direct3DDevice->CreateInputLayout(SkyLayout, 2, mVertexShader->Code, mVertexShader->ByteCodeLength, trianglestrip_inputlayout.ReleaseAndGetAddressOf());
+
+	mPixelShader = static_cast<D3D11PixelShader*>(factory.GetShader(L"mainPS", SHADER_TYPE::PIXEL_SHADER, "MainToBackBufferPS"));
+
+	SamplerStateDesc SSDesc;
+	SSDesc.Filter = TEXTURE_FILTER::LINEAR;
+	SSDesc.TextureAddress = SAMPLER_ADDRESS_MODE::WRAP;
+	SSDesc.MaxAnisotropy = 16;
+	SSDesc.ComparisonFunction = COMPARISON_FUNCTION::NEVER;
+
+	mSamplerLinearWrap = static_cast<D3D11SamplerState*>(pDevice->CreateSamplerState(SSDesc));
+
+
+	///
+	D3D11_BLEND_DESC blendDesc;
+	ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+	blendDesc.AlphaToCoverageEnable = FALSE;
+	blendDesc.IndependentBlendEnable = FALSE;
+
+	const D3D11_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
+	{
+		FALSE,
+		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
+		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
+		D3D11_COLOR_WRITE_ENABLE_ALL,
+	};
+
+	blendDesc.RenderTarget[0] = defaultRenderTargetBlendDesc;
+	result = direct3DDevice->CreateBlendState(&blendDesc, mNoBlending.ReleaseAndGetAddressOf());
+
+	m_states = std::make_unique<DirectX::CommonStates>(direct3DDevice);
+
 	return false;
 }
 
@@ -104,5 +147,25 @@ void D3D11ViewPort::Present(int SyncInterval)
 
 void D3D11ViewPort::RenderToBackBuffer()
 {
+	mDeviceContext->RSSetState(m_states->CullNone());
+	mDeviceContext->OMSetDepthStencilState(m_states->DepthNone(), 0);
+
+	const float BlendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+	mDeviceContext->OMSetBlendState(mNoBlending.Get(), BlendFactor, 0xFFFFFFFF);
+
+	mDeviceContext->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), mDepthStencilView.Get());
+
+	CD3D11_VIEWPORT viewport(0.0f, 0.0f, static_cast<float>(mOutputWidth), static_cast<float>(mOutputHeight));
+
+	mDeviceContext->RSSetViewports(1, &viewport);
+
+	mDeviceContext->PSSetSamplers(0, 1, mSamplerLinearWrap->Resource.GetAddressOf());
+
+	mDeviceContext->IASetInputLayout(trianglestrip_inputlayout.Get());
+	mDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	mDeviceContext->VSSetShader(mVertexShader->Resource.Get(), nullptr, 0);
+	mDeviceContext->PSSetShader(mPixelShader->Resource.Get(), nullptr, 0);
+
 	mDeviceContext->Draw(4, 0);
 }

@@ -100,6 +100,8 @@ bool SystemClass::Frame() const
 {
 	viewPort->Clear();
 
+	viewPort->RenderToBackBuffer();
+
 	viewPort->Present();
 
 	return true;
