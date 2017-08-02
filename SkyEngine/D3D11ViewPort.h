@@ -7,6 +7,7 @@
 #include "common.h"
 #include "D3D11Shader.h"
 #include "D3D11SamplerState.h"
+#include "D3D11BlendState.h"
 #include "CommonStates.h"
 
 using namespace std;
@@ -31,12 +32,12 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView>  mDepthStencilView;
 
 	Microsoft::WRL::ComPtr<ID3D11InputLayout>		trianglestrip_inputlayout;
-	Microsoft::WRL::ComPtr<ID3D11BlendState> mNoBlending;
 
 	std::unique_ptr<DirectX::CommonStates> m_states;
 
 	D3D11VertexShader* mVertexShader;
 	D3D11PixelShader* mPixelShader;
 	D3D11SamplerState* mSamplerLinearWrap;
+	D3D11BlendState * mNoBlending;
 };
 

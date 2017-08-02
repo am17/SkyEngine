@@ -3,7 +3,7 @@
 #include "D3D11Shader.h"
 #include "D3D11SamplerState.h"
 #include "D3D11ConstantBuffer.h"
-#include "D3D11ConstantBuffer.h"
+#include "D3D11BlendState.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -249,6 +249,35 @@ SamplerState * D3D11Device::CreateSamplerState(const SamplerStateDesc& Initializ
 	SState->Resource = SamplerStateHandle;
 
 	return SState;
+}
+
+BlendState * D3D11Device::CreateBlendState()
+{
+	D3D11_BLEND_DESC blendDesc;
+	ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
+	blendDesc.AlphaToCoverageEnable = FALSE;
+	blendDesc.IndependentBlendEnable = FALSE;
+
+	const D3D11_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
+	{
+		FALSE,
+		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
+		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
+		D3D11_COLOR_WRITE_ENABLE_ALL,
+	};
+
+	blendDesc.RenderTarget[0] = defaultRenderTargetBlendDesc;
+
+	Microsoft::WRL::ComPtr<ID3D11BlendState> StateHandle;
+
+	HRESULT hr = mDirect3DDevice->CreateBlendState(&blendDesc, StateHandle.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
+
+	D3D11BlendState *state = new D3D11BlendState();
+	state->Resource = StateHandle;
+
+	return state;
 }
 
 ConstantBuffer * D3D11Device::CreateConstantBuffer(unsigned int BufferSize)

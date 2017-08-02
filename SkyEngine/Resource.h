@@ -8,3 +8,4 @@ public:
 };
 
 class SamplerState : public Resource {};
+class BlendState : public Resource {};

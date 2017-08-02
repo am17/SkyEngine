@@ -17,5 +17,6 @@ public:
 	virtual GeometryShader* CreateGeometryShader(const void* pByteCode, size_t ByteCodeLength) = 0;
 	virtual ComputeShader* CreateComputeShader(const void* pByteCode, size_t ByteCodeLength) = 0;
 	virtual SamplerState* CreateSamplerState(const SamplerStateDesc& Initializer) = 0;
+	virtual BlendState* CreateBlendState() = 0;
 	virtual ConstantBuffer* CreateConstantBuffer(unsigned int BufferSize) = 0;
 };

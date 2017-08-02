@@ -148,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="common.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="D3D11BlendState.h" />
     <ClInclude Include="D3D11ConstantBuffer.h" />
     <ClInclude Include="D3D11Device.h" />
     <ClInclude Include="D3D11SamplerState.h" />

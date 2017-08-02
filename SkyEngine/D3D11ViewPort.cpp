@@ -94,23 +94,7 @@ bool D3D11ViewPort::Init(HWND ouputWindow, bool IsFullscreen)
 
 	mSamplerLinearWrap = static_cast<D3D11SamplerState*>(pDevice->CreateSamplerState(SSDesc));
 
-
-	///
-	D3D11_BLEND_DESC blendDesc;
-	ZeroMemory(&blendDesc, sizeof(D3D11_BLEND_DESC));
-	blendDesc.AlphaToCoverageEnable = FALSE;
-	blendDesc.IndependentBlendEnable = FALSE;
-
-	const D3D11_RENDER_TARGET_BLEND_DESC defaultRenderTargetBlendDesc =
-	{
-		FALSE,
-		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
-		D3D11_BLEND_ONE, D3D11_BLEND_ZERO, D3D11_BLEND_OP_ADD,
-		D3D11_COLOR_WRITE_ENABLE_ALL,
-	};
-
-	blendDesc.RenderTarget[0] = defaultRenderTargetBlendDesc;
-	result = direct3DDevice->CreateBlendState(&blendDesc, mNoBlending.ReleaseAndGetAddressOf());
+	mNoBlending = static_cast<D3D11BlendState*>(pDevice->CreateBlendState());
 
 	m_states = std::make_unique<DirectX::CommonStates>(direct3DDevice);
 
@@ -151,7 +135,7 @@ void D3D11ViewPort::RenderToBackBuffer()
 	mDeviceContext->OMSetDepthStencilState(m_states->DepthNone(), 0);
 
 	const float BlendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-	mDeviceContext->OMSetBlendState(mNoBlending.Get(), BlendFactor, 0xFFFFFFFF);
+	mDeviceContext->OMSetBlendState(mNoBlending->Resource.Get(), BlendFactor, 0xFFFFFFFF);
 
 	mDeviceContext->OMSetRenderTargets(1, mRenderTargetView.GetAddressOf(), mDepthStencilView.Get());
 
