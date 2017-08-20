@@ -1,4 +1,5 @@
 #pragma once
+#include "VertexElement.h"
 
 class Resource
 {
@@ -9,3 +10,4 @@ public:
 
 class SamplerState : public Resource {};
 class BlendState : public Resource {};
+class VertexDeclaration : public Resource {};

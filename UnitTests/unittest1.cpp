@@ -112,5 +112,35 @@ namespace UnitTests
 
 			buffer->UpdateData(Data, Size);
 		}
+
+		TEST_METHOD(CreateVertexDeclarationTest)
+		{
+			IDeviceImpl* device = new D3D11Device();
+			device->Init();
+
+			vector<VertexElement> Elements;
+
+			VertexElement el1;
+			el1.SemanticName = "POSITION";
+			el1.Type = VERTEX_ELEMENT_TYPE::FLOAT4;
+			el1.AttributeIndex = 0;
+			el1.StreamIndex = 0;
+			el1.Offset = 0;
+			el1.UseInstanceIndex = 0;
+			Elements.push_back(el1);
+
+			VertexElement el2;
+			el2.SemanticName = "TEXCOORD";
+			el2.Type = VERTEX_ELEMENT_TYPE::FLOAT2;
+			el2.AttributeIndex = 0;
+			el2.StreamIndex = 0;
+			el2.Offset = 16;
+			el2.UseInstanceIndex = 0;
+			Elements.push_back(el2);
+
+			VertexDeclaration *vertexDecl = device->CreateVertexDeclaration(Elements);
+
+			assert(vertexDecl != nullptr);
+		}
 	};
 }

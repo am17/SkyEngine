@@ -4,6 +4,7 @@
 #include "D3D11SamplerState.h"
 #include "D3D11ConstantBuffer.h"
 #include "D3D11BlendState.h"
+#include "D3D11VertexDeclaration.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -301,6 +302,74 @@ ConstantBuffer * D3D11Device::CreateConstantBuffer(unsigned int BufferSize)
 	CBuffer->Resource = Buffer;
 
 	return CBuffer;
+}
+
+VertexDeclaration * D3D11Device::CreateVertexDeclaration(vector<VertexElement>& Elements)
+{
+	vector<D3D11_INPUT_ELEMENT_DESC> declarations;
+
+	for (vector<VertexElement>::iterator it = Elements.begin(); it != Elements.end(); ++it)
+	{
+		const VertexElement& Element = *it;
+		D3D11_INPUT_ELEMENT_DESC D3DElement = { 0 };
+		D3DElement.InputSlot = Element.StreamIndex;
+		D3DElement.AlignedByteOffset = Element.Offset;
+
+		switch (Element.Type)
+		{
+		case VERTEX_ELEMENT_TYPE::FLOAT1:
+			D3DElement.Format = DXGI_FORMAT_R32_FLOAT; break;
+		case VERTEX_ELEMENT_TYPE::FLOAT2:
+			D3DElement.Format = DXGI_FORMAT_R32G32_FLOAT; break;
+		case VERTEX_ELEMENT_TYPE::FLOAT3:
+			D3DElement.Format = DXGI_FORMAT_R32G32B32_FLOAT; break;
+		case VERTEX_ELEMENT_TYPE::FLOAT4:
+			D3DElement.Format = DXGI_FORMAT_R32G32B32A32_FLOAT; break;
+		case VERTEX_ELEMENT_TYPE::PACKEDNORMAL:
+			D3DElement.Format = DXGI_FORMAT_R8G8B8A8_UNORM; break;
+		case VERTEX_ELEMENT_TYPE::UBYTE4:
+			D3DElement.Format = DXGI_FORMAT_R8G8B8A8_UINT; break;
+		case VERTEX_ELEMENT_TYPE::UBYTE4N:
+			D3DElement.Format = DXGI_FORMAT_R8G8B8A8_UNORM; break;
+		case VERTEX_ELEMENT_TYPE::COLOR:
+			D3DElement.Format = DXGI_FORMAT_B8G8R8A8_UNORM; break;
+		case VERTEX_ELEMENT_TYPE::SHORT2:
+			D3DElement.Format = DXGI_FORMAT_R16G16_SINT; break;
+		case VERTEX_ELEMENT_TYPE::SHORT4:
+			D3DElement.Format = DXGI_FORMAT_R16G16B16A16_SINT; break;
+		case VERTEX_ELEMENT_TYPE::SHORT2N:
+			D3DElement.Format = DXGI_FORMAT_R16G16_SNORM; break;
+		case VERTEX_ELEMENT_TYPE::HALF2:
+			D3DElement.Format = DXGI_FORMAT_R16G16_FLOAT; break;
+		case VERTEX_ELEMENT_TYPE::HALF4:
+			D3DElement.Format = DXGI_FORMAT_R16G16B16A16_FLOAT; break;
+		case VERTEX_ELEMENT_TYPE::SHORT4N:
+			D3DElement.Format = DXGI_FORMAT_R16G16B16A16_SNORM; break;
+		case VERTEX_ELEMENT_TYPE::USHORT2:
+			D3DElement.Format = DXGI_FORMAT_R16G16_UINT; break;
+		case VERTEX_ELEMENT_TYPE::USHORT4:
+			D3DElement.Format = DXGI_FORMAT_R16G16B16A16_UINT; break;
+		case VERTEX_ELEMENT_TYPE::USHORT2N:
+			D3DElement.Format = DXGI_FORMAT_R16G16_UNORM; break;
+		case VERTEX_ELEMENT_TYPE::USHORT4N:
+			D3DElement.Format = DXGI_FORMAT_R16G16B16A16_UNORM; break;
+		case VERTEX_ELEMENT_TYPE::URGB10A2N:
+			D3DElement.Format = DXGI_FORMAT_R10G10B10A2_UNORM; break;
+		default:
+			break;
+		}
+
+		D3DElement.SemanticName = Element.SemanticName; //"ATTRIBUTE";
+		D3DElement.SemanticIndex = Element.AttributeIndex;
+		D3DElement.InputSlotClass = Element.UseInstanceIndex ? D3D11_INPUT_PER_INSTANCE_DATA : D3D11_INPUT_PER_VERTEX_DATA;
+		D3DElement.InstanceDataStepRate = Element.UseInstanceIndex ? 1 : 0;
+
+		declarations.push_back(D3DElement);
+	}
+
+	D3D11VertexDeclaration *vertexDeclaration = new D3D11VertexDeclaration(declarations);
+
+	return vertexDeclaration;
 }
 
 D3D11_TEXTURE_ADDRESS_MODE D3D11Device::ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode)

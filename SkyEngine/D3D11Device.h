@@ -23,6 +23,7 @@ public:
 	SamplerState* CreateSamplerState(const SamplerStateDesc& Initializer) override;
 	BlendState* CreateBlendState() override;
 	ConstantBuffer* CreateConstantBuffer(unsigned int BufferSize) override;
+	VertexDeclaration* CreateVertexDeclaration(vector<VertexElement>& Elements) override;
 private:
 	D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode);
 	D3D11_COMPARISON_FUNC ConvertCompareFunction(COMPARISON_FUNCTION ComparisonFunction);

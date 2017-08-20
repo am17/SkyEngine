@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "D3D11ViewPort.h"
 #include "D3D11Device.h"
+#include "D3D11VertexDeclaration.h"
 #include "ShaderFactory.h"
 
 D3D11ViewPort::D3D11ViewPort(IDeviceImpl *device, unsigned int width, unsigned int height)
@@ -76,13 +77,31 @@ bool D3D11ViewPort::Init(HWND ouputWindow, bool IsFullscreen)
 
 	mVertexShader = static_cast<D3D11VertexShader*>(factory.GetShader(L"mainVS", SHADER_TYPE::VERTEX_SHADER, "FullScreenQuadVS"));
 
-	const D3D11_INPUT_ELEMENT_DESC SkyLayout[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 16, D3D11_INPUT_PER_VERTEX_DATA, 0 }
-	};
+	vector<VertexElement> Elements;
 
-	result = direct3DDevice->CreateInputLayout(SkyLayout, 2, mVertexShader->Code, mVertexShader->ByteCodeLength, trianglestrip_inputlayout.ReleaseAndGetAddressOf());
+	VertexElement el1;
+	el1.SemanticName = "POSITION";
+	el1.Type = VERTEX_ELEMENT_TYPE::FLOAT4;
+	el1.AttributeIndex = 0;
+	el1.StreamIndex = 0;
+	el1.Offset = 0;
+	el1.UseInstanceIndex = 0;
+	Elements.push_back(el1);
+
+	VertexElement el2;
+	el2.SemanticName = "TEXCOORD";
+	el2.Type = VERTEX_ELEMENT_TYPE::FLOAT2;
+	el2.AttributeIndex = 0;
+	el2.StreamIndex = 0;
+	el2.Offset = 16;
+	el2.UseInstanceIndex = 0;
+	Elements.push_back(el2);
+
+	VertexDeclaration *vd = pDevice->CreateVertexDeclaration(Elements);
+
+	D3D11VertexDeclaration *vertexDecl = static_cast<D3D11VertexDeclaration*>(vd);
+
+	result = direct3DDevice->CreateInputLayout(vertexDecl->VertexElements.data(), 2, mVertexShader->Code, mVertexShader->ByteCodeLength, trianglestrip_inputlayout.ReleaseAndGetAddressOf());
 
 	mPixelShader = static_cast<D3D11PixelShader*>(factory.GetShader(L"mainPS", SHADER_TYPE::PIXEL_SHADER, "MainToBackBufferPS"));
 

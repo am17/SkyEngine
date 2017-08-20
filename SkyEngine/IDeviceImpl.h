@@ -3,6 +3,9 @@
 #include "Shader.h"
 #include "SamplerStateDesc.h"
 #include "ConstantBuffer.h"
+#include <vector>
+
+using namespace std;
 
 class IDeviceImpl
 {
@@ -19,4 +22,5 @@ public:
 	virtual SamplerState* CreateSamplerState(const SamplerStateDesc& Initializer) = 0;
 	virtual BlendState* CreateBlendState() = 0;
 	virtual ConstantBuffer* CreateConstantBuffer(unsigned int BufferSize) = 0;
+	virtual VertexDeclaration* CreateVertexDeclaration(vector<VertexElement>& Elements) = 0;
 };
