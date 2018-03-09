@@ -1,23 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{cc2379d2-e03c-4efc-8b0e-a07341eec5dc}</UniqueIdentifier>
     </Filter>
     <Filter Include="docs">
       <UniqueIdentifier>{9dd60e06-3d3a-4c10-ac93-587b0c3f15bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{7d722cf0-5a59-4915-a758-3a237524f71d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Components">
+      <UniqueIdentifier>{61a4b2d1-0b31-4a0f-b272-2f29662e1478}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation">
+      <UniqueIdentifier>{9a76d15b-3b19-4ba7-9fec-08edd19d4698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Components">
+      <UniqueIdentifier>{48d67441-9559-4dac-9cd4-17016fc3a7e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Entity">
+      <UniqueIdentifier>{b72318b2-8f99-4cf7-83a9-402d74843396}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Entity">
+      <UniqueIdentifier>{0a1ad3cf-9991-4197-9721-3f8813a8064b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Systems">
+      <UniqueIdentifier>{52a3fc23-a0ee-488d-8bf4-e282567f2d0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Systems">
+      <UniqueIdentifier>{a26ee834-444a-4f82-b163-cc58447b2617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Application">
+      <UniqueIdentifier>{9694cf09-b4a1-40f7-bee7-c9a185bc5760}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Application">
+      <UniqueIdentifier>{7c79b994-c584-4668-864b-5feeb3c971e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,73 +51,6 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IDeviceImpl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11Device.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11ViewPort.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ShaderFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11SamplerState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SamplerStateDesc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11ConstantBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ConstantBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11BlendState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11VertexDeclaration.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexElement.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="dllmain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11Device.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11ViewPort.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ShaderFactory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -109,5 +60,61 @@
     <FxCompile Include="..\TestApp\Shaders\mainVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="Implementation\Components\Component.cpp">
+      <Filter>Implementation\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Entity\Entity.cpp">
+      <Filter>Implementation\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem.cpp">
+      <Filter>Implementation\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Application\Application.cpp">
+      <Filter>Implementation\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Application\World.cpp">
+      <Filter>Implementation\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Application\WindowsWindow.cpp">
+      <Filter>Implementation\Application</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Include\common.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\stdafx.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\targetver.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Components\Component.h">
+      <Filter>Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Entity\Entity.h">
+      <Filter>Include\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Components\ComponentTypes.h">
+      <Filter>Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\ISystem.h">
+      <Filter>Include\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem.h">
+      <Filter>Include\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Application\Application.h">
+      <Filter>Include\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Application\World.h">
+      <Filter>Include\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Application\WindowsWindow.h">
+      <Filter>Include\Application</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,0 +1,9 @@
+Living without D3DX
+https://blogs.msdn.microsoft.com/chuckw/2013/08/20/living-without-d3dx/
+
+http://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/projection-matrix-GPU-rendering-pipeline-clipping
+
+https://habrahabr.ru/post/226421/
+
+
+C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\VsGd.exe

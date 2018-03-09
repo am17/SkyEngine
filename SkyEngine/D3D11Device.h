@@ -24,6 +24,8 @@ public:
 	BlendState* CreateBlendState() override;
 	ConstantBuffer* CreateConstantBuffer(unsigned int BufferSize) override;
 	VertexDeclaration* CreateVertexDeclaration(vector<VertexElement>& Elements) override;
+	RasterizerState* CreateRasterizerState(const RasterizerDesc& Initializer) override;
+	DepthStencilState* CreateDepthStencilState(const DepthStencilDesc& Initializer) override;
 private:
 	D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode);
 	D3D11_COMPARISON_FUNC ConvertCompareFunction(COMPARISON_FUNCTION ComparisonFunction);

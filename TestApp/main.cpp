@@ -1,4 +1,6 @@
 #include "systemclass.h"
+#include "Include\Application\Application.h"
+#include <memory>
 
 //#ifdef _DEBUG
 //#ifndef DBG_NEW
@@ -10,30 +12,37 @@
 //int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow)
 int main()
 {
-	//ObjToTxtConverter *loader = new ObjToTxtConverter();
+	std::unique_ptr<Application> app = std::make_unique<Application>();
 
-	//loader->ConvertToTxt("cube.obj", "model2.txt");
+	if (!app)
+	{
+		return 0;
+	}
 
-	bool result;
+	bool result = app->Init();
 
-	// Create the system object.
-	SystemClass* System = new SystemClass;
+	if (result)
+	{
+		app->Run();
+
+		app->Shutdown();
+	}
+
+	/*SystemClass* System = new SystemClass;
 	if (!System)
 	{
 		return 0;
 	}
 
-	// Initialize and run the system object.
 	result = System->Initialize();
 	if (result)
 	{
 		System->Run();
 	}
 
-	// Shutdown and release the system object.
 	System->Shutdown();
 	delete System;
-	System = 0;
+	System = 0;*/
 
 	return 0;
 }

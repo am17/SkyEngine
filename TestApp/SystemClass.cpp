@@ -39,11 +39,11 @@ bool SystemClass::Initialize()
 	// Initialize the windows api.
 	InitializeWindows(screenWidth, screenHeight);
 
-	IDeviceImpl* device = new D3D11Device();
+	/*IDeviceImpl* device = new D3D11Device();
 	device->Init();
 
 	viewPort = new D3D11ViewPort(device, screenWidth, screenHeight);
-	viewPort->Init(m_hwnd);
+	viewPort->Init(m_hwnd);*/
 
 	return true;
 }
@@ -96,14 +96,8 @@ void SystemClass::Run()
 	return;
 }
 
-bool SystemClass::Frame() const
+bool SystemClass::Frame()
 {
-	viewPort->Clear();
-
-	viewPort->RenderToBackBuffer();
-
-	viewPort->Present();
-
 	return true;
 }
 

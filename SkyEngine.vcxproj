@@ -98,12 +98,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SKYENGINE_EXPORTS;SKYENGINEDLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh;D:\_Dev\2016\DirectXMesh-master\DirectXMesh;C:\dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh;C:\dev\SkyEngine\SkyEngine\Include;C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh;D:\_Dev\2016\DirectXMesh-master\DirectXMesh;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;D:\_Dev\2016\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;C:\Users\VORONOVE\Source\Repos\DirectXMesh\DirectXMesh\Bin\Desktop_2015\Win32\Debug\;C:\dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;D:\_Dev\2016\DirectXMesh-master\DirectXMesh\Bin\Desktop_2013\x64\Debug;C:\Users\VORONOVE\Source\Repos\DirectXMesh\DirectXMesh\Bin\Desktop_2015\Win32\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>DirectXMesh.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -146,39 +146,28 @@
     <Text Include="Модели освещения.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="common.h" />
+    <ClInclude Include="D3D11Device.h" />
+    <ClInclude Include="D3D11Resources.h" />
+    <ClInclude Include="D3D11Viewport.h" />
+    <ClInclude Include="DepthRenderTargetViewImpl.h" />
+    <ClInclude Include="PixelFormat.h" />
+    <ClInclude Include="RenderTargetViewImpl.h" />
+    <ClInclude Include="ResourcesImpl.h" />
+    <ClInclude Include="skyMath.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="utility.h" />
+    <ClInclude Include="VertexElement.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="D3D11Device.cpp" />
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="Implementation\Application\Application.cpp" />
-    <ClCompile Include="Implementation\Application\WindowsWindow.cpp" />
-    <ClCompile Include="Implementation\Application\World.cpp" />
-    <ClCompile Include="Implementation\Components\Component.cpp" />
-    <ClCompile Include="Implementation\Entity\Entity.cpp" />
-    <ClCompile Include="Implementation\Systems\RenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="..\TestApp\Shaders\mainPS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-    </FxCompile>
-    <FxCompile Include="..\TestApp\Shaders\mainVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-    </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Include\Application\Application.h" />
-    <ClInclude Include="Include\Application\WindowsWindow.h" />
-    <ClInclude Include="Include\Application\World.h" />
-    <ClInclude Include="Include\common.h" />
-    <ClInclude Include="Include\Components\Component.h" />
-    <ClInclude Include="Include\Components\ComponentTypes.h" />
-    <ClInclude Include="Include\Entity\Entity.h" />
-    <ClInclude Include="Include\stdafx.h" />
-    <ClInclude Include="Include\Systems\ISystem.h" />
-    <ClInclude Include="Include\Systems\RenderSystem.h" />
-    <ClInclude Include="Include\targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

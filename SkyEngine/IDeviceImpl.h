@@ -3,6 +3,8 @@
 #include "Shader.h"
 #include "SamplerStateDesc.h"
 #include "ConstantBuffer.h"
+#include "RasterizerDesc.h"
+#include "DepthStencilDesc.h"
 #include <vector>
 
 using namespace std;
@@ -23,4 +25,6 @@ public:
 	virtual BlendState* CreateBlendState() = 0;
 	virtual ConstantBuffer* CreateConstantBuffer(unsigned int BufferSize) = 0;
 	virtual VertexDeclaration* CreateVertexDeclaration(vector<VertexElement>& Elements) = 0;
+	virtual RasterizerState* CreateRasterizerState(const RasterizerDesc& Initializer) = 0;
+	virtual DepthStencilState* CreateDepthStencilState(const DepthStencilDesc& Initializer) = 0;
 };

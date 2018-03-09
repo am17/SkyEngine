@@ -1,0 +1,58 @@
+Upscaling for example xBR, Super xBR and SuperRes
+High dynamic range rendering
+Particle Effects
+Bloom
+Light Scattering
+Screen Space Reflections
+Point Light Attenuation
+Filmic Scene Tone Mapping
+Digital Camera Light Compensation
+Eye Adaptation
+Image Distortion
+Barrel Distortion
+Chromatic Aberration
+Bokeh Effect
+Sobel Operator
+Glow
+Lens flare
+Pseudo Lens Flare[1]
+Cubic Lens Distorion Flare[2]
+Sharpen / Unsharpen(Texture Unsharp Mask, LumaSharpen, Sharpen, Sharpen Complex 1/2, Adaptive-Sharpen)
+Bump mapping
+Motion blur
+Smart Blur
+Heat Haze
+Ambient Occlusion including custom types.
+HBAO
+Cel shading
+Outlines
+Sketch Shading
+Paint Shading
+Ink Shading
+Crepuscular rays
+Film grain simulation
+Grayscale simulation
+Infrared and Nightvision simulation
+Bloodlust effect.
+Sepia
+Screen Borders
+Screen Rotation
+Splitscreen
+Anaglyph
+Depth of field
+Depth Haze
+Shadow mapping
+Global illumination
+Gamma Correction
+Color grading
+Color correction
+Contrast Adjustement
+Dynamic Contrast
+Antialiasing like FXAA, AGAA,[3] MSAA, SSAA and SMAA and custom antialiasing methods
+Texture filtering like Point, Linear, Bilinear, Trilinear, Anisotropic and custom algorithms.
+Dithering including Subpixel Dithering.
+Vignette
+Pixel Vibrance
+Posterization and Deposterization.
+Scanline simulation
+Fog/Mist

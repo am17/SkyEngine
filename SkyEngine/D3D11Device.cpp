@@ -5,6 +5,8 @@
 #include "D3D11ConstantBuffer.h"
 #include "D3D11BlendState.h"
 #include "D3D11VertexDeclaration.h"
+#include "D3D11RasterizerState.h"
+#include "D3D11DepthStencilState.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -370,6 +372,50 @@ VertexDeclaration * D3D11Device::CreateVertexDeclaration(vector<VertexElement>& 
 	D3D11VertexDeclaration *vertexDeclaration = new D3D11VertexDeclaration(declarations);
 
 	return vertexDeclaration;
+}
+
+RasterizerState * D3D11Device::CreateRasterizerState(const RasterizerDesc& Initializer)
+{
+	Microsoft::WRL::ComPtr<ID3D11RasterizerState> StateHandle;
+
+	D3D11_RASTERIZER_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
+	desc.CullMode = Initializer.CullBack ? D3D11_CULL_BACK : D3D11_CULL_NONE;
+	desc.FrontCounterClockwise = TRUE;
+	desc.MultisampleEnable = Initializer.MultisampleEnable;
+	desc.FillMode = Initializer.WireframeMode ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID;
+
+	HRESULT hr = mDirect3DDevice->CreateRasterizerState(&desc, StateHandle.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
+
+	D3D11RasterizerState* State = new D3D11RasterizerState();
+	State->Resource = StateHandle;
+
+	return State;
+}
+
+DepthStencilState * D3D11Device::CreateDepthStencilState(const DepthStencilDesc& Initializer)
+{
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> StateHandle;
+
+	D3D11_DEPTH_STENCIL_DESC depthDesc;
+	ZeroMemory(&depthDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
+	depthDesc.DepthEnable = Initializer.DepthEnable;
+	depthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthDesc.StencilEnable = Initializer.StencilEnable;
+	depthDesc.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
+	depthDesc.StencilWriteMask = D3D11_DEFAULT_STENCIL_WRITE_MASK;
+	depthDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+
+	HRESULT hr = mDirect3DDevice->CreateDepthStencilState(&depthDesc, StateHandle.ReleaseAndGetAddressOf());
+
+	assert(SUCCEEDED(hr));
+
+	D3D11DepthStencilState* State = new D3D11DepthStencilState();
+	State->Resource = StateHandle;
+
+	return State;
 }
 
 D3D11_TEXTURE_ADDRESS_MODE D3D11Device::ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode)

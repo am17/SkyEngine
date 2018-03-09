@@ -142,5 +142,25 @@ namespace UnitTests
 
 			assert(vertexDecl != nullptr);
 		}
+
+		TEST_METHOD(CreateRasterizerStateTest)
+		{
+			IDeviceImpl* device = new D3D11Device();
+			device->Init();
+
+			RasterizerDesc Desc;
+
+			device->CreateRasterizerState(Desc);
+		}
+
+		TEST_METHOD(CreateDepthStencilState)
+		{
+			IDeviceImpl* device = new D3D11Device();
+			device->Init();
+
+			DepthStencilDesc Desc;
+
+			device->CreateDepthStencilState(Desc);
+		}
 	};
 }
