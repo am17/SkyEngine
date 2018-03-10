@@ -153,6 +153,8 @@
     <ClCompile Include="Implementation\Components\Component.cpp" />
     <ClCompile Include="Implementation\Entity\Entity.cpp" />
     <ClCompile Include="Implementation\Systems\RenderSystem.cpp" />
+    <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11Device.cpp" />
+    <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11ViewPort.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -178,6 +180,10 @@
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\Systems\ISystem.h" />
     <ClInclude Include="Include\Systems\RenderSystem.h" />
+    <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11Device.h" />
+    <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11ViewPort.h" />
+    <ClInclude Include="Include\Systems\RenderSystem\IDeviceImpl.h" />
+    <ClInclude Include="Include\Systems\RenderSystem\ViewPort.h" />
     <ClInclude Include="Include\targetver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

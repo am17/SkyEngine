@@ -14,11 +14,6 @@ int main()
 {
 	std::unique_ptr<Application> app = std::make_unique<Application>();
 
-	if (!app)
-	{
-		return 0;
-	}
-
 	bool result = app->Init();
 
 	if (result)
@@ -27,22 +22,6 @@ int main()
 
 		app->Shutdown();
 	}
-
-	/*SystemClass* System = new SystemClass;
-	if (!System)
-	{
-		return 0;
-	}
-
-	result = System->Initialize();
-	if (result)
-	{
-		System->Run();
-	}
-
-	System->Shutdown();
-	delete System;
-	System = 0;*/
 
 	return 0;
 }

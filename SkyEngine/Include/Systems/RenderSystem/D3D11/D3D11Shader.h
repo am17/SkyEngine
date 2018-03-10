@@ -1,7 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include <wrl/client.h>
-#include "Shader.h"
+#include "Systems\RenderSystem\Shader.h"
 
 class D3D11VertexShader : public VertexShader
 {

@@ -1,6 +1,10 @@
 #pragma once
+#define WIN32_LEAN_AND_MEAN
 #include "Systems\ISystem.h"
 #include <Windows.h>
+#include <memory>
+#include "Systems\RenderSystem\IDeviceImpl.h"
+#include "Systems\RenderSystem\ViewPort.h"
 
 class RenderSystem : public ISystem
 {
@@ -12,5 +16,6 @@ public:
 	void Stop() override;
 	void Init(HWND hWnd, int width, int height);
 private:
-
+	std::unique_ptr<IDeviceImpl> device;
+	std::unique_ptr<ViewPort> viewPort;
 };

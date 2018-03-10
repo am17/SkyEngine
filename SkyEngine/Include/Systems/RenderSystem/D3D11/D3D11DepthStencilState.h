@@ -1,7 +1,7 @@
 #pragma once
 #include <wrl/client.h>
 #include "d3d11.h"
-#include "Resource.h"
+#include "Systems\RenderSystem\Resource.h"
 
 class D3D11DepthStencilState : public DepthStencilState
 {

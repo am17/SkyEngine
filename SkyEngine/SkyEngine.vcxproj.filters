@@ -37,6 +37,18 @@
     <Filter Include="Implementation\Application">
       <UniqueIdentifier>{7c79b994-c584-4668-864b-5feeb3c971e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Systems\RenderSystem">
+      <UniqueIdentifier>{064650f8-fc7a-48fd-b5e4-b4a3b637458a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Include\Systems\RenderSystem\D3D11">
+      <UniqueIdentifier>{f2302612-391f-4de0-b9bc-80deaf2a9a8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Systems\RenderSystem">
+      <UniqueIdentifier>{68b8b534-885e-4a10-aca0-a53a23c903a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Implementation\Systems\RenderSystem\D3D11">
+      <UniqueIdentifier>{a5014e00-c259-4e0d-8511-782619e20e19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,6 +93,12 @@
     <ClCompile Include="Implementation\Application\WindowsWindow.cpp">
       <Filter>Implementation\Application</Filter>
     </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11Device.cpp">
+      <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11ViewPort.cpp">
+      <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\common.h">
@@ -115,6 +133,18 @@
     </ClInclude>
     <ClInclude Include="Include\Application\WindowsWindow.h">
       <Filter>Include\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11Device.h">
+      <Filter>Include\Systems\RenderSystem\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\IDeviceImpl.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11ViewPort.h">
+      <Filter>Include\Systems\RenderSystem\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\ViewPort.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

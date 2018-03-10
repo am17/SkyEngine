@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "D3D11Device.h"
-#include "D3D11Shader.h"
-#include "D3D11SamplerState.h"
-#include "D3D11ConstantBuffer.h"
-#include "D3D11BlendState.h"
-#include "D3D11VertexDeclaration.h"
-#include "D3D11RasterizerState.h"
-#include "D3D11DepthStencilState.h"
+#include "Systems\RenderSystem\D3D11\D3D11Device.h"
+#include "Systems\RenderSystem\D3D11\D3D11Shader.h"
+#include "Systems\RenderSystem\D3D11\D3D11SamplerState.h"
+#include "Systems\RenderSystem\D3D11\D3D11ConstantBuffer.h"
+#include "Systems\RenderSystem\D3D11\D3D11BlendState.h"
+#include "Systems\RenderSystem\D3D11\D3D11VertexDeclaration.h"
+#include "Systems\RenderSystem\D3D11\D3D11RasterizerState.h"
+#include "Systems\RenderSystem\D3D11\D3D11DepthStencilState.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")

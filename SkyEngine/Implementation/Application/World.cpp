@@ -36,5 +36,5 @@ RenderSystem * World::GetRenderSystem() const
 
 void World::Update()
 {
-
+	renderSystem->Update(0);
 }
