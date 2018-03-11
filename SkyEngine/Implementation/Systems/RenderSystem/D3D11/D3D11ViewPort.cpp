@@ -25,8 +25,10 @@ D3D11ViewPort::D3D11ViewPort(D3D11Device *device, HWND hWnd, unsigned int backBu
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> backBuffer;
 	SwapChain->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
-	m_d3dDevice->CreateRenderTargetView(backBuffer.Get(), nullptr, m_renderTargetView.ReleaseAndGetAddressOf());
-
+	
+	RenderTargetTexture = make_shared<D3D11Texture2D>(pDevice);
+	RenderTargetTexture->Create(backBuffer.Get());
+	
 	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT, Width, Height, 1, 1, D3D11_BIND_DEPTH_STENCIL);
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencil;
 	m_d3dDevice->CreateTexture2D(&depthStencilDesc, nullptr, depthStencil.GetAddressOf());
@@ -43,10 +45,12 @@ void D3D11ViewPort::Clear()
 {
 	float ClearColor[4] = { 0.8f, 0.8f, 1.0f, 1.0f };
 
-	pDevice->GetContext()->ClearRenderTargetView(m_renderTargetView.Get(), ClearColor);
+	ID3D11RenderTargetView *rtv = RenderTargetTexture.get()->RenderTargetView.Get();
+
+	pDevice->GetContext()->ClearRenderTargetView(rtv, ClearColor);
 	pDevice->GetContext()->ClearDepthStencilView(m_depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	pDevice->GetContext()->OMSetRenderTargets(1, m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
+	pDevice->GetContext()->OMSetRenderTargets(1, &rtv, m_depthStencilView.Get());
 
 	CD3D11_VIEWPORT viewport(0.0f, 0.0f, Width, Height);
 	pDevice->GetContext()->RSSetViewports(1, &viewport);

@@ -99,6 +99,9 @@
     <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11ViewPort.cpp">
       <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
     </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11Texture2D.cpp">
+      <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\common.h">
@@ -144,6 +147,12 @@
       <Filter>Include\Systems\RenderSystem\D3D11</Filter>
     </ClInclude>
     <ClInclude Include="Include\Systems\RenderSystem\ViewPort.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11Texture2D.h">
+      <Filter>Include\Systems\RenderSystem\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\Texture2D.h">
       <Filter>Include\Systems\RenderSystem</Filter>
     </ClInclude>
   </ItemGroup>
