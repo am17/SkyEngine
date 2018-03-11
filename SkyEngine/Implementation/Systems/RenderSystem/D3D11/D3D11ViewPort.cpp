@@ -27,7 +27,7 @@ D3D11ViewPort::D3D11ViewPort(D3D11Device *device, HWND hWnd, unsigned int backBu
 	SwapChain->GetBuffer(0, IID_PPV_ARGS(backBuffer.GetAddressOf()));
 	
 	RenderTargetTexture = make_shared<D3D11Texture2D>(pDevice);
-	RenderTargetTexture->Create(backBuffer.Get());
+	RenderTargetTexture->CreateRenderTarget(backBuffer.Get());
 	
 	CD3D11_TEXTURE2D_DESC depthStencilDesc(DXGI_FORMAT_D24_UNORM_S8_UINT, Width, Height, 1, 1, D3D11_BIND_DEPTH_STENCIL);
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencil;

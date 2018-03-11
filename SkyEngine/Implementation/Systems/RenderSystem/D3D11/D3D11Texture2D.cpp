@@ -27,23 +27,24 @@ int D3D11Texture2D::GetHeight() const
 	return Height;
 }
 
-bool D3D11Texture2D::Create(int width, int height, bool isMultisampled)
+bool D3D11Texture2D::Create(int width, int height, const void * pData, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality)
 {
 	assert(width > 0 && height > 0);
+	assert(createRTV != createDSV);
 
 	Width = width;
 	Height = height;
-	Multisampled = isMultisampled;
+	Multisampled = multiSampleCount > 0;
 
-	if (Resource)
+	if (createRTV && Resource)
 	{
-		Create(Resource.Get());
+		CreateRenderTarget(Resource.Get());
 	}
 
 	return true;
 }
 
-bool D3D11Texture2D::Create(ID3D11Texture2D * texture)
+bool D3D11Texture2D::CreateRenderTarget(ID3D11Texture2D * texture)
 {
 	Resource = texture;
 

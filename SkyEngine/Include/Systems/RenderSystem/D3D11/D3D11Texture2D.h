@@ -12,8 +12,8 @@ public:
 	bool IsMultisampled() const override;
 	int GetWidth() const override;
 	int GetHeight() const override;
-	bool Create(int width, int height, bool isMultisampled = false) override;
-	bool Create(ID3D11Texture2D* texture);
+	bool Create(int width, int height, const void * pData, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality) override;
+	bool CreateRenderTarget(ID3D11Texture2D* texture);
 	Microsoft::WRL::ComPtr<ID3D11Texture2D>  Resource;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>  RenderTargetView;
 private:
