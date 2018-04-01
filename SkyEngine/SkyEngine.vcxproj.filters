@@ -102,6 +102,9 @@
     <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11Texture2D.cpp">
       <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
     </ClCompile>
+    <ClCompile Include="Implementation\Components\CameraComponent.cpp">
+      <Filter>Implementation\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\common.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="Include\Systems\RenderSystem\Texture2D.h">
       <Filter>Include\Systems\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Components\CameraComponent.h">
+      <Filter>Include\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

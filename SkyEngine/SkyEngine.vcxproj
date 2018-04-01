@@ -150,6 +150,7 @@
     <ClCompile Include="Implementation\Application\Application.cpp" />
     <ClCompile Include="Implementation\Application\WindowsWindow.cpp" />
     <ClCompile Include="Implementation\Application\World.cpp" />
+    <ClCompile Include="Implementation\Components\CameraComponent.cpp" />
     <ClCompile Include="Implementation\Components\Component.cpp" />
     <ClCompile Include="Implementation\Entity\Entity.cpp" />
     <ClCompile Include="Implementation\Systems\RenderSystem.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="Include\Application\WindowsWindow.h" />
     <ClInclude Include="Include\Application\World.h" />
     <ClInclude Include="Include\common.h" />
+    <ClInclude Include="Include\Components\CameraComponent.h" />
     <ClInclude Include="Include\Components\Component.h" />
     <ClInclude Include="Include\Components\ComponentTypes.h" />
     <ClInclude Include="Include\Entity\Entity.h" />

@@ -7,6 +7,6 @@ public:
 	Component();
 	~Component();
 	ComponentTypes GetType();
-private:
+protected:
 	ComponentTypes type;
 };
