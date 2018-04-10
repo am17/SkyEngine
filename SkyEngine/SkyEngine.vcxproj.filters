@@ -161,5 +161,8 @@
     <ClInclude Include="Include\Components\CameraComponent.h">
       <Filter>Include\Components</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Application\StepTimer.h">
+      <Filter>Include\Application</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

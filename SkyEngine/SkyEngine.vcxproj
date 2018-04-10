@@ -173,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\Application\Application.h" />
+    <ClInclude Include="Include\Application\StepTimer.h" />
     <ClInclude Include="Include\Application\WindowsWindow.h" />
     <ClInclude Include="Include\Application\World.h" />
     <ClInclude Include="Include\common.h" />

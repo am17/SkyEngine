@@ -36,5 +36,10 @@ RenderSystem * World::GetRenderSystem() const
 
 void World::Update()
 {
-	renderSystem->Update(0);
+	m_timer.Tick([&]() {
+
+		double time = m_timer.GetTotalSeconds();
+		renderSystem->Update(time);
+
+	});
 }

@@ -12,7 +12,11 @@ RenderSystem::~RenderSystem()
 
 void RenderSystem::Update(double time)
 {
+	printf("%f\n", time);
+
 	viewPort->Clear();
+
+	//TODO: Render here
 
 	viewPort->Present();
 }
