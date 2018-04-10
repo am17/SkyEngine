@@ -98,7 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SKYENGINE_EXPORTS;SKYENGINEDLL_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh;D:\_Dev\2016\DirectXMesh-master\DirectXMesh;C:\dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh;C:\dev\SkyEngine\SkyEngine\Include;C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\_dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh;D:\_Dev\2016\DirectXMesh-master\DirectXMesh;C:\dev\DirectXMesh-master\DirectXMesh-master\DirectXMesh;C:\dev\SkyEngine\SkyEngine\Include;C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine\Include;C:\Users\VORONOVE\Source\Repos\SkyEngine\SkyEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

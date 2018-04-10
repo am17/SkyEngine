@@ -100,7 +100,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine\packages\directxtk_desktop_2013.2016.2.23.1\build\native\include;D:\_Dev\SkyEngine\packages\directxtk_desktop_2013.2016.2.23.1\build\native\include;C:\Users\VORONOVE\Source\Repos\SkyEngine\SkyEngine;C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine;C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine\Include;C:\dev\SkyEngine\SkyEngine\;C:\dev\SkyEngine\SkyEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine\packages\directxtk_desktop_2013.2016.2.23.1\build\native\include;D:\_Dev\SkyEngine\packages\directxtk_desktop_2013.2016.2.23.1\build\native\include;C:\Users\VORONOVE\Source\Repos\SkyEngine\SkyEngine;C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine;C:\Users\Admin\Source\Repos\SkyEngine\SkyEngine\Include;C:\dev\SkyEngine\SkyEngine\;C:\dev\SkyEngine\SkyEngine\Include;C:\Users\VORONOVE\Source\Repos\SkyEngine\SkyEngine\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
