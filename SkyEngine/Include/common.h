@@ -3,3 +3,6 @@
 #else
 #define SKYENGINEDLL __declspec(dllimport) 
 #endif
+
+#pragma warning(push)
+#pragma warning(disable : 4005)	// macro redefinition
