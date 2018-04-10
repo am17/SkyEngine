@@ -36,3 +36,8 @@ void RenderSystem::Init(HWND hWnd, int width, int height)
 
 	viewPort = std::make_unique<D3D11ViewPort>(static_cast<D3D11Device*>(device.get()), hWnd, width, height, false);
 }
+
+bool RenderSystem::RegisterEntity(Entity * entity)
+{
+	return true;
+}

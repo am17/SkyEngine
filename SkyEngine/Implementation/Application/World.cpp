@@ -22,16 +22,20 @@ void World::Stop()
 	renderSystem->Stop();
 }
 
-bool World::Init()
+bool World::Init(HWND hWnd, int width, int height)
 {
 	renderSystem = std::make_unique<RenderSystem>();
+
+	renderSystem->Init(hWnd, width, height);
 
 	return true;
 }
 
-RenderSystem * World::GetRenderSystem() const
+void World::AddEntity(Entity * entity)
 {
-	return renderSystem.get();
+	renderSystem->RegisterEntity(entity);
+
+	entities.push_back(entity);
 }
 
 void World::Update()

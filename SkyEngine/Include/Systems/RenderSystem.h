@@ -15,6 +15,7 @@ public:
 	void Start() override;
 	void Stop() override;
 	void Init(HWND hWnd, int width, int height);
+	bool RegisterEntity(Entity *entity) override;
 private:
 	std::unique_ptr<IDeviceImpl> device;
 	std::unique_ptr<ViewPort> viewPort;

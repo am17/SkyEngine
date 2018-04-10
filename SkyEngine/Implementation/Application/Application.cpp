@@ -20,12 +20,14 @@ bool Application::Init()
 		return false;
 	}
 
-	if (!world->Init())
+	if (!world->Init(window->GetHWND(), screenWidth, screenHeight))
 	{
 		return false;
 	}
 
-	world->GetRenderSystem()->Init(window->GetHWND(), screenWidth, screenHeight);
+	Entity *testEntity = new Entity();
+
+	world->AddEntity(testEntity);
 
 	return true;
 }
