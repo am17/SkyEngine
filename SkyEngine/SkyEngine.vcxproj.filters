@@ -105,6 +105,12 @@
     <ClCompile Include="Implementation\Components\CameraComponent.cpp">
       <Filter>Implementation\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11IndexBuffer.cpp">
+      <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11VertexBuffer.cpp">
+      <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\common.h">
@@ -163,6 +169,18 @@
     </ClInclude>
     <ClInclude Include="Include\Application\StepTimer.h">
       <Filter>Include\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\IndexBuffer.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\VertexBuffer.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11IndexBuffer.h">
+      <Filter>Include\Systems\RenderSystem\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11VertexBuffer.h">
+      <Filter>Include\Systems\RenderSystem\D3D11</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
