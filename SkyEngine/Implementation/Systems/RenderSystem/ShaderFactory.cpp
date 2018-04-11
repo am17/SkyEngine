@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "ShaderFactory.h"
+#include "Systems\RenderSystem\ShaderFactory.h"
 #include <string>
 #include <d3dcompiler.h>
 
@@ -23,6 +23,7 @@ Shader * ShaderFactory::GetShader(const wchar_t * name, SHADER_TYPE shaderType, 
 
 	if (mShaderCache.end() == it)
 	{
+		//SkyEngine\TestApp\Shaders
 		wstring FileName(L"Shaders/");
 		FileName.append(name);
 		FileName.append(L".hlsl");

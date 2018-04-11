@@ -6,6 +6,7 @@
 #include "Systems\RenderSystem\IDeviceImpl.h"
 #include "Systems\RenderSystem\ViewPort.h"
 #include "Systems\RenderSystem\MeshFactory.h"
+#include "Systems\RenderSystem\ShaderFactory.h"
 
 class RenderSystem : public ISystem
 {
@@ -19,8 +20,10 @@ public:
 	bool RegisterEntity(Entity *entity) override;
 	IDeviceImpl* GetDevice() const;
 	MeshFactory* GetMeshFactory() const;
+	ShaderFactory* GetShaderFactory() const;
 private:
 	std::shared_ptr<IDeviceImpl> device;
 	std::unique_ptr<ViewPort> viewPort;
 	std::unique_ptr<MeshFactory> meshFactory;
+	std::unique_ptr<ShaderFactory> shaderFactory;
 };

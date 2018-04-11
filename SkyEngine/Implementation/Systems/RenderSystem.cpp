@@ -46,6 +46,8 @@ void RenderSystem::Init(HWND hWnd, int width, int height)
 	viewPort = std::make_unique<D3D11ViewPort>(static_cast<D3D11Device*>(device.get()), hWnd, width, height, false);
 
 	meshFactory = std::make_unique<MeshFactory>(device.get());
+
+	shaderFactory = std::make_unique<ShaderFactory>(device.get());
 }
 
 bool RenderSystem::RegisterEntity(Entity * entity)
@@ -61,4 +63,9 @@ IDeviceImpl * RenderSystem::GetDevice() const
 MeshFactory * RenderSystem::GetMeshFactory() const
 {
 	return meshFactory.get();
+}
+
+ShaderFactory * RenderSystem::GetShaderFactory() const
+{
+	return shaderFactory.get();
 }

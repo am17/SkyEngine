@@ -32,6 +32,9 @@ bool Application::Init()
 
 	Mesh *mesh = world->GetRenderSystem()->GetMeshFactory()->CreateTriangle();
 
+	Shader *vertexShader = world->GetRenderSystem()->GetShaderFactory()->GetShader(L"colorVS", SHADER_TYPE::VERTEX_SHADER, "main");
+	Shader *pixelShader = world->GetRenderSystem()->GetShaderFactory()->GetShader(L"colorPS", SHADER_TYPE::PIXEL_SHADER, "main");
+
 	RenderComponent *renderComponent = new RenderComponent(mesh);
 
 	testEntity->Add(renderComponent);

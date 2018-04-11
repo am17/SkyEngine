@@ -72,6 +72,12 @@
     <FxCompile Include="..\TestApp\Shaders\mainVS.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="Shaders\colorVS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="Shaders\colorPS.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -118,6 +124,9 @@
       <Filter>Implementation\Systems\RenderSystem</Filter>
     </ClCompile>
     <ClCompile Include="Implementation\Systems\RenderSystem\MeshFactory.cpp">
+      <Filter>Implementation\Systems\RenderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\ShaderFactory.cpp">
       <Filter>Implementation\Systems\RenderSystem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -198,6 +207,9 @@
       <Filter>Include\Systems\RenderSystem</Filter>
     </ClInclude>
     <ClInclude Include="Include\Systems\RenderSystem\MeshFactory.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\ShaderFactory.h">
       <Filter>Include\Systems\RenderSystem</Filter>
     </ClInclude>
   </ItemGroup>
