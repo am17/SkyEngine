@@ -1,4 +1,6 @@
 #include "Application\Application.h"
+#include "Components\RenderComponent.h"
+#include "Systems\RenderSystem\Mesh.h"
 
 Application::Application()
 {
@@ -25,9 +27,17 @@ bool Application::Init()
 		return false;
 	}
 
+	//
 	Entity *testEntity = new Entity();
 
+	Mesh *mesh = world->GetRenderSystem()->GetMeshFactory()->CreateTriangle();
+
+	RenderComponent *renderComponent = new RenderComponent(mesh);
+
+	testEntity->Add(renderComponent);
+
 	world->AddEntity(testEntity);
+	//
 
 	return true;
 }

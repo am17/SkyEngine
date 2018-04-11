@@ -5,6 +5,8 @@
 #include "ConstantBuffer.h"
 #include "RasterizerDesc.h"
 #include "DepthStencilDesc.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 #include <vector>
 
 using namespace std;
@@ -27,4 +29,9 @@ public:
 	virtual VertexDeclaration* CreateVertexDeclaration(vector<VertexElement>& Elements) = 0;
 	virtual RasterizerState* CreateRasterizerState(const RasterizerDesc& Initializer) = 0;
 	virtual DepthStencilState* CreateDepthStencilState(const DepthStencilDesc& Initializer) = 0;
+	virtual VertexBuffer* CreateVertexBuffer(const void * pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage) = 0;
+	virtual IndexBuffer* CreateIndexBuffer(const void *pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage) = 0;
+	virtual void SetVertexBuffer(VertexBuffer *vertexBuffer, unsigned int StartSlot, unsigned int Stride, unsigned int Offset) = 0;
+	virtual void SetIndexBuffer(IndexBuffer *indexBuffer) = 0;
+	virtual void DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex) = 0;
 };

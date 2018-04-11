@@ -7,6 +7,8 @@
 #include "Systems\RenderSystem\D3D11\D3D11VertexDeclaration.h"
 #include "Systems\RenderSystem\D3D11\D3D11RasterizerState.h"
 #include "Systems\RenderSystem\D3D11\D3D11DepthStencilState.h"
+#include "Systems\RenderSystem\D3D11\D3D11VertexBuffer.h"
+#include "Systems\RenderSystem\D3D11\D3D11IndexBuffer.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -416,6 +418,125 @@ DepthStencilState * D3D11Device::CreateDepthStencilState(const DepthStencilDesc&
 	State->Resource = StateHandle;
 
 	return State;
+}
+
+VertexBuffer * D3D11Device::CreateVertexBuffer(const void * pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage)
+{
+	unsigned int Size = stride * elementsCount;
+
+	assert(Size > 0);
+
+	D3D11_BUFFER_DESC Desc;
+	ZeroMemory(&Desc, sizeof(D3D11_BUFFER_DESC));
+	Desc.ByteWidth = Size;
+	Desc.Usage = (InUsage == BUFFER_USAGE_FLAGS::ANYDYNAMIC) ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+	Desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	Desc.CPUAccessFlags = (InUsage == BUFFER_USAGE_FLAGS::ANYDYNAMIC) ? D3D11_CPU_ACCESS_WRITE : 0;
+	Desc.MiscFlags = 0;
+	Desc.StructureByteStride = 0;
+
+	if (InUsage == BUFFER_USAGE_FLAGS::UNORDERED_ACCESS)
+	{
+		Desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	}
+
+	if (InUsage == BUFFER_USAGE_FLAGS::BYTE_ADDRESS_BUFFER)
+	{
+		Desc.MiscFlags |= D3D11_RESOURCE_MISC_BUFFER_ALLOW_RAW_VIEWS;
+	}
+
+	if (InUsage == BUFFER_USAGE_FLAGS::STREAM_OUTPUT)
+	{
+		Desc.BindFlags |= D3D11_BIND_STREAM_OUTPUT;
+	}
+
+	if (InUsage == BUFFER_USAGE_FLAGS::DRAW_INDIRECT)
+	{
+		Desc.MiscFlags |= D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS;
+	}
+
+	if (InUsage == BUFFER_USAGE_FLAGS::SHADER_RESOURCE)
+	{
+		Desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+	}
+
+	D3D11_SUBRESOURCE_DATA InitData;
+
+	InitData.pSysMem = pData;
+	InitData.SysMemPitch = Size;
+	InitData.SysMemSlicePitch = 0;
+	
+	Microsoft::WRL::ComPtr<ID3D11Buffer> VertexBufferResource;
+	HRESULT hr = mDirect3DDevice->CreateBuffer(&Desc, &InitData, VertexBufferResource.ReleaseAndGetAddressOf());
+
+	return new D3D11VertexBuffer(VertexBufferResource.Get(), Size, InUsage);
+}
+
+IndexBuffer * D3D11Device::CreateIndexBuffer(const void * pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage)
+{
+	unsigned int Size = stride * elementsCount;
+
+	assert(Size > 0);
+
+	// Describe the index buffer.
+	D3D11_BUFFER_DESC Desc;
+	ZeroMemory(&Desc, sizeof(D3D11_BUFFER_DESC));
+	Desc.ByteWidth = Size;
+	Desc.Usage = (InUsage == BUFFER_USAGE_FLAGS::ANYDYNAMIC) ? D3D11_USAGE_DYNAMIC : D3D11_USAGE_DEFAULT;
+	Desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	Desc.CPUAccessFlags = (InUsage == BUFFER_USAGE_FLAGS::ANYDYNAMIC) ? D3D11_CPU_ACCESS_WRITE : 0;
+	Desc.MiscFlags = 0;
+
+	if (InUsage == BUFFER_USAGE_FLAGS::UNORDERED_ACCESS)
+	{
+		Desc.BindFlags |= D3D11_BIND_UNORDERED_ACCESS;
+	}
+
+	if (InUsage == BUFFER_USAGE_FLAGS::DRAW_INDIRECT)
+	{
+		Desc.MiscFlags |= D3D11_RESOURCE_MISC_DRAWINDIRECT_ARGS;
+	}
+
+	if (InUsage == BUFFER_USAGE_FLAGS::SHADER_RESOURCE)
+	{
+		Desc.BindFlags |= D3D11_BIND_SHADER_RESOURCE;
+	}
+
+	// If a resource array was provided for the resource, create the resource pre-populated
+	D3D11_SUBRESOURCE_DATA InitData;
+	ZeroMemory(&InitData, sizeof(InitData));
+
+	InitData.pSysMem = pData;
+	InitData.SysMemPitch = Size;
+	InitData.SysMemSlicePitch = 0;
+
+	Microsoft::WRL::ComPtr<ID3D11Buffer> IndexBufferResource;
+	HRESULT hr = mDirect3DDevice->CreateBuffer(&Desc, &InitData, IndexBufferResource.ReleaseAndGetAddressOf());
+
+	return new D3D11IndexBuffer(IndexBufferResource.Get(), stride, Size, InUsage);
+}
+
+void D3D11Device::SetVertexBuffer(VertexBuffer * vertexBuffer, unsigned int StartSlot, unsigned int Stride, unsigned int Offset)
+{
+	D3D11VertexBuffer* VertexBufferImp = static_cast<D3D11VertexBuffer*>(vertexBuffer);
+
+	mD3DDeviceIMContext->IASetVertexBuffers(StartSlot, 1, VertexBufferImp->Resource.GetAddressOf(), &Stride, &Offset);
+}
+
+void D3D11Device::SetIndexBuffer(IndexBuffer * indexBuffer)
+{
+	D3D11IndexBuffer* IndexBufferImpl = static_cast<D3D11IndexBuffer*>(indexBuffer);
+
+	const DXGI_FORMAT Format = (indexBuffer->GetStride() == sizeof(unsigned short) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT);
+
+	mD3DDeviceIMContext->IASetIndexBuffer(IndexBufferImpl->Resource.Get(), Format, 0);
+}
+
+void D3D11Device::DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex)
+{
+	mD3DDeviceIMContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	mD3DDeviceIMContext->DrawIndexed(3, StartIndex, BaseVertexIndex);
 }
 
 D3D11_TEXTURE_ADDRESS_MODE D3D11Device::ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode)

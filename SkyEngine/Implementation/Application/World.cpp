@@ -38,6 +38,11 @@ void World::AddEntity(Entity * entity)
 	entities.push_back(entity);
 }
 
+RenderSystem * World::GetRenderSystem() const
+{
+	return renderSystem.get();
+}
+
 void World::Update()
 {
 	m_timer.Tick([&]() {

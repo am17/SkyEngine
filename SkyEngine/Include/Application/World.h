@@ -16,6 +16,7 @@ public:
 	void Stop();
 	bool Init(HWND hWnd, int width, int height);
 	void AddEntity(Entity *entity);
+	RenderSystem* GetRenderSystem() const;
 private:
 	DX::StepTimer m_timer;
 	std::unique_ptr<RenderSystem> renderSystem;

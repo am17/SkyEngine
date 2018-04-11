@@ -4,5 +4,6 @@ enum class ComponentTypes
 {
 	Transform,
 	Mesh,
-	Camera
+	Camera, 
+	Render
 };

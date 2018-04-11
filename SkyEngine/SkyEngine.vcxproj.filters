@@ -111,6 +111,15 @@
     <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11VertexBuffer.cpp">
       <Filter>Implementation\Systems\RenderSystem\D3D11</Filter>
     </ClCompile>
+    <ClCompile Include="Implementation\Components\RenderComponent.cpp">
+      <Filter>Implementation\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\Mesh.cpp">
+      <Filter>Implementation\Systems\RenderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Implementation\Systems\RenderSystem\MeshFactory.cpp">
+      <Filter>Implementation\Systems\RenderSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Include\common.h">
@@ -181,6 +190,15 @@
     </ClInclude>
     <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11VertexBuffer.h">
       <Filter>Include\Systems\RenderSystem\D3D11</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Components\RenderComponent.h">
+      <Filter>Include\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\Mesh.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Systems\RenderSystem\MeshFactory.h">
+      <Filter>Include\Systems\RenderSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

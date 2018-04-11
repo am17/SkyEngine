@@ -27,6 +27,11 @@ public:
 	VertexDeclaration* CreateVertexDeclaration(vector<VertexElement>& Elements) override;
 	RasterizerState* CreateRasterizerState(const RasterizerDesc& Initializer) override;
 	DepthStencilState* CreateDepthStencilState(const DepthStencilDesc& Initializer) override;
+	VertexBuffer* CreateVertexBuffer(const void * pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage) override;
+	IndexBuffer* CreateIndexBuffer(const void *pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage) override;
+	void SetVertexBuffer(VertexBuffer *vertexBuffer, unsigned int StartSlot, unsigned int Stride, unsigned int Offset) override;
+	void SetIndexBuffer(IndexBuffer *indexBuffer) override;
+	void DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex) override;
 private:
 	D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode);
 	D3D11_COMPARISON_FUNC ConvertCompareFunction(COMPARISON_FUNCTION ComparisonFunction);

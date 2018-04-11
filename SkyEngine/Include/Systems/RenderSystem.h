@@ -5,6 +5,7 @@
 #include <memory>
 #include "Systems\RenderSystem\IDeviceImpl.h"
 #include "Systems\RenderSystem\ViewPort.h"
+#include "Systems\RenderSystem\MeshFactory.h"
 
 class RenderSystem : public ISystem
 {
@@ -16,7 +17,10 @@ public:
 	void Stop() override;
 	void Init(HWND hWnd, int width, int height);
 	bool RegisterEntity(Entity *entity) override;
+	IDeviceImpl* GetDevice() const;
+	MeshFactory* GetMeshFactory() const;
 private:
-	std::unique_ptr<IDeviceImpl> device;
+	std::shared_ptr<IDeviceImpl> device;
 	std::unique_ptr<ViewPort> viewPort;
+	std::unique_ptr<MeshFactory> meshFactory;
 };

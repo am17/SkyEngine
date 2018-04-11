@@ -152,6 +152,7 @@
     <ClCompile Include="Implementation\Application\World.cpp" />
     <ClCompile Include="Implementation\Components\CameraComponent.cpp" />
     <ClCompile Include="Implementation\Components\Component.cpp" />
+    <ClCompile Include="Implementation\Components\RenderComponent.cpp" />
     <ClCompile Include="Implementation\Entity\Entity.cpp" />
     <ClCompile Include="Implementation\Systems\RenderSystem.cpp" />
     <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11Device.cpp" />
@@ -159,6 +160,8 @@
     <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11Texture2D.cpp" />
     <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11VertexBuffer.cpp" />
     <ClCompile Include="Implementation\Systems\RenderSystem\D3D11\D3D11ViewPort.cpp" />
+    <ClCompile Include="Implementation\Systems\RenderSystem\Mesh.cpp" />
+    <ClCompile Include="Implementation\Systems\RenderSystem\MeshFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -182,6 +185,7 @@
     <ClInclude Include="Include\Components\CameraComponent.h" />
     <ClInclude Include="Include\Components\Component.h" />
     <ClInclude Include="Include\Components\ComponentTypes.h" />
+    <ClInclude Include="Include\Components\RenderComponent.h" />
     <ClInclude Include="Include\Entity\Entity.h" />
     <ClInclude Include="Include\stdafx.h" />
     <ClInclude Include="Include\Systems\ISystem.h" />
@@ -193,6 +197,8 @@
     <ClInclude Include="Include\Systems\RenderSystem\D3D11\D3D11ViewPort.h" />
     <ClInclude Include="Include\Systems\RenderSystem\IDeviceImpl.h" />
     <ClInclude Include="Include\Systems\RenderSystem\IndexBuffer.h" />
+    <ClInclude Include="Include\Systems\RenderSystem\Mesh.h" />
+    <ClInclude Include="Include\Systems\RenderSystem\MeshFactory.h" />
     <ClInclude Include="Include\Systems\RenderSystem\Texture2D.h" />
     <ClInclude Include="Include\Systems\RenderSystem\VertexBuffer.h" />
     <ClInclude Include="Include\Systems\RenderSystem\ViewPort.h" />
