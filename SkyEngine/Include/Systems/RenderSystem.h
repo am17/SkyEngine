@@ -22,6 +22,8 @@ public:
 	MeshFactory* GetMeshFactory() const;
 	ShaderFactory* GetShaderFactory() const;
 private:
+	void RenderToBackBuffer();
+
 	std::shared_ptr<IDeviceImpl> device;
 	std::unique_ptr<ViewPort> viewPort;
 	std::unique_ptr<MeshFactory> meshFactory;

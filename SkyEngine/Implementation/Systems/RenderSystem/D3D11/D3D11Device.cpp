@@ -9,6 +9,7 @@
 #include "Systems\RenderSystem\D3D11\D3D11DepthStencilState.h"
 #include "Systems\RenderSystem\D3D11\D3D11VertexBuffer.h"
 #include "Systems\RenderSystem\D3D11\D3D11IndexBuffer.h"
+#include "Systems\RenderSystem\D3D11\D3D11ViewPort.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -54,6 +55,8 @@ bool D3D11Device::Init()
 
 		if (FAILED(result)) return false;
 	}
+
+	CreateCommonStates();
 
 	return true;
 }
@@ -532,11 +535,91 @@ void D3D11Device::SetIndexBuffer(IndexBuffer * indexBuffer)
 	mD3DDeviceIMContext->IASetIndexBuffer(IndexBufferImpl->Resource.Get(), Format, 0);
 }
 
+void D3D11Device::Draw(unsigned int vertexCount)
+{
+	mD3DDeviceIMContext->Draw(vertexCount, 0);
+}
+
 void D3D11Device::DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex)
 {
 	mD3DDeviceIMContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	mD3DDeviceIMContext->DrawIndexed(3, StartIndex, BaseVertexIndex);
+}
+
+void D3D11Device::SetViewport(ViewPort * pViewPort)
+{
+	assert(pViewPort != nullptr);
+
+	D3D11ViewPort *viewPort = static_cast<D3D11ViewPort*>(pViewPort);
+
+	mD3DDeviceIMContext->RSSetViewports(1, viewPort->Resource.get());
+}
+
+void D3D11Device::SetBlendState(COMMON_BLEND_STATES state)
+{
+	const float BlendFactor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	switch (state)
+	{
+	case COMMON_BLEND_STATES::BS_OPAQUE:
+		mD3DDeviceIMContext->OMSetBlendState(Opaque, BlendFactor, 0xFFFFFFFF);
+		break;
+	case COMMON_BLEND_STATES::BS_ALPHABLEND:
+		mD3DDeviceIMContext->OMSetBlendState(AlphaBlend, BlendFactor, 0xFFFFFFFF);
+		break;
+	case COMMON_BLEND_STATES::BS_ADDITIVE:
+		mD3DDeviceIMContext->OMSetBlendState(Additive, BlendFactor, 0xFFFFFFFF);
+		break;
+	case COMMON_BLEND_STATES::BS_NONPREMULTIPLIED:
+		mD3DDeviceIMContext->OMSetBlendState(NonPremultiplied, BlendFactor, 0xFFFFFFFF);
+		break;
+	default:
+		break;
+	}
+}
+
+void D3D11Device::SetDepthStencilState(COMMON_DEPTH_STENCIL_STATES state)
+{
+	switch (state)
+	{
+	case COMMON_DEPTH_STENCIL_STATES::DSS_DEPTHNONE:
+		mD3DDeviceIMContext->OMSetDepthStencilState(DepthNone, 0);
+		break;
+	case COMMON_DEPTH_STENCIL_STATES::DSS_DEPTHDEFAULT:
+		mD3DDeviceIMContext->OMSetDepthStencilState(DepthDefault, 0);
+		break;
+	case COMMON_DEPTH_STENCIL_STATES::DSS_DEPTHREAD:
+		mD3DDeviceIMContext->OMSetDepthStencilState(DepthRead, 0);
+		break;
+	default:
+		break;
+	}
+}
+
+void D3D11Device::SetRasterizerState(COMMON_RASTERIZER_STATES state)
+{
+	switch (state)
+	{
+	case COMMON_RASTERIZER_STATES::RS_CULLNONE:
+		mD3DDeviceIMContext->RSSetState(CullNone);
+		break;
+	case COMMON_RASTERIZER_STATES::RS_CULLCLOCKWISE:
+		mD3DDeviceIMContext->RSSetState(CullClockwise);
+		break;
+	case COMMON_RASTERIZER_STATES::RS_CULLCOUNTERCLOCKWISE:
+		mD3DDeviceIMContext->RSSetState(CullCounterClockwise);
+		break;
+	case COMMON_RASTERIZER_STATES::RS_WIREFRAME:
+		mD3DDeviceIMContext->RSSetState(Wireframe);
+		break;
+	default:
+		break;
+	}
+}
+
+void D3D11Device::SetSamplerState(COMMON_SAMPLER_STATES state)
+{
 }
 
 D3D11_TEXTURE_ADDRESS_MODE D3D11Device::ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode)
@@ -577,4 +660,152 @@ D3D11_COMPARISON_FUNC D3D11Device::ConvertCompareFunction(COMPARISON_FUNCTION Co
 	default:
 		return D3D11_COMPARISON_NEVER;
 	}
+}
+
+void D3D11Device::CreateCommonStates()
+{
+	CD3D11_DEFAULT def;
+	CD3D11_BLEND_DESC desc(def);
+
+	// Opaque
+	HRESULT hr = mDirect3DDevice->CreateBlendState(&desc, &Opaque);
+
+	// AlphaBlend
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+	hr = mDirect3DDevice->CreateBlendState(&desc, &AlphaBlend);
+
+	// Additive
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE;
+	hr = mDirect3DDevice->CreateBlendState(&desc, &Additive);
+
+	// NonPremultiplied
+	desc.RenderTarget[0].BlendEnable = TRUE;
+	desc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+	desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+	hr = mDirect3DDevice->CreateBlendState(&desc, &NonPremultiplied);
+
+	CD3D11_DEPTH_STENCIL_DESC depthDesc(def);
+
+	// DepthDefault
+	depthDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	hr = mDirect3DDevice->CreateDepthStencilState(&depthDesc, &DepthDefault);
+
+	// DepthRead
+	depthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	depthDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	hr = mDirect3DDevice->CreateDepthStencilState(&depthDesc, &DepthRead);
+
+	// DepthNone
+	depthDesc.DepthEnable = FALSE;
+	depthDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
+	depthDesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
+	hr = mDirect3DDevice->CreateDepthStencilState(&depthDesc, &DepthNone);
+
+
+	// CullNone
+	CD3D11_RASTERIZER_DESC restDesc(D3D11_FILL_SOLID, D3D11_CULL_NONE,
+	FALSE /* FrontCounterClockwise */,
+	D3D11_DEFAULT_DEPTH_BIAS,
+	D3D11_DEFAULT_DEPTH_BIAS_CLAMP,
+	D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
+	TRUE /* DepthClipEnable */,
+	FALSE /* ScissorEnable */,
+	TRUE /* MultisampleEnable */,
+	FALSE /* AntialiasedLineEnable */);
+
+	hr = mDirect3DDevice->CreateRasterizerState(&restDesc, &CullNone);
+
+	// CullClockwise
+	CD3D11_RASTERIZER_DESC restDesc2(D3D11_FILL_SOLID, D3D11_CULL_FRONT,
+	FALSE /* FrontCounterClockwise */,
+	D3D11_DEFAULT_DEPTH_BIAS,
+	D3D11_DEFAULT_DEPTH_BIAS_CLAMP,
+	D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
+	TRUE /* DepthClipEnable */,
+	FALSE /* ScissorEnable */,
+	TRUE /* MultisampleEnable */,
+	FALSE /* AntialiasedLineEnable */);
+
+	hr = mDirect3DDevice->CreateRasterizerState(&restDesc2, &CullClockwise);
+
+	// CullCounterClockwise
+	CD3D11_RASTERIZER_DESC restDesc3(D3D11_FILL_SOLID, D3D11_CULL_BACK,
+	FALSE /* FrontCounterClockwise */,
+	D3D11_DEFAULT_DEPTH_BIAS,
+	D3D11_DEFAULT_DEPTH_BIAS_CLAMP,
+	D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
+	TRUE /* DepthClipEnable */,
+	FALSE /* ScissorEnable */,
+	TRUE /* MultisampleEnable */,
+	FALSE /* AntialiasedLineEnable */);
+
+	hr = mDirect3DDevice->CreateRasterizerState(&restDesc3, &CullCounterClockwise);
+
+	// Wireframe
+	CD3D11_RASTERIZER_DESC restDesc4(D3D11_FILL_WIREFRAME, D3D11_CULL_NONE,
+	FALSE /* FrontCounterClockwise */,
+	D3D11_DEFAULT_DEPTH_BIAS,
+	D3D11_DEFAULT_DEPTH_BIAS_CLAMP,
+	D3D11_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
+	TRUE /* DepthClipEnable */,
+	FALSE /* ScissorEnable */,
+	TRUE /* MultisampleEnable */,
+	FALSE /* AntialiasedLineEnable */);
+
+	hr = mDirect3DDevice->CreateRasterizerState(&restDesc4, &Wireframe);
+
+	float maxAnisotropy = 16;
+	const float border[4] = { 0.f, 0.f, 0.f, 0.f };
+
+	// PointWrap
+	CD3D11_SAMPLER_DESC samplerDesc1(D3D11_FILTER_MIN_MAG_MIP_POINT,
+		D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP,
+		0.f, maxAnisotropy, D3D11_COMPARISON_NEVER, border, 0.f, FLT_MAX);
+
+	hr = mDirect3DDevice->CreateSamplerState(&samplerDesc1, &PointWrap);
+
+	// PointClamp
+	CD3D11_SAMPLER_DESC samplerDesc2(D3D11_FILTER_MIN_MAG_MIP_POINT,
+		D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP,
+		0.f, maxAnisotropy, D3D11_COMPARISON_NEVER, border, 0.f, FLT_MAX);
+
+	hr = mDirect3DDevice->CreateSamplerState(&samplerDesc2, &PointClamp);
+
+	// LinearWrap
+	CD3D11_SAMPLER_DESC samplerDesc3(D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+		D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP,
+		0.f, maxAnisotropy, D3D11_COMPARISON_NEVER, border, 0.f, FLT_MAX);
+
+	hr = mDirect3DDevice->CreateSamplerState(&samplerDesc3, &LinearWrap);
+
+	// LinearClamp
+	CD3D11_SAMPLER_DESC samplerDesc4(D3D11_FILTER_MIN_MAG_MIP_LINEAR,
+		D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP,
+		0.f, maxAnisotropy, D3D11_COMPARISON_NEVER, border, 0.f, FLT_MAX);
+
+	hr = mDirect3DDevice->CreateSamplerState(&samplerDesc4, &LinearClamp);
+
+	// AnisotropicWrap
+	CD3D11_SAMPLER_DESC samplerDesc5(D3D11_FILTER_ANISOTROPIC,
+		D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP, D3D11_TEXTURE_ADDRESS_WRAP,
+		0.f, maxAnisotropy, D3D11_COMPARISON_NEVER, border, 0.f, FLT_MAX);
+
+	hr = mDirect3DDevice->CreateSamplerState(&samplerDesc5, &AnisotropicWrap);
+
+	// AnisotropicClamp
+	CD3D11_SAMPLER_DESC samplerDesc6(D3D11_FILTER_ANISOTROPIC,
+		D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP, D3D11_TEXTURE_ADDRESS_CLAMP,
+		0.f, maxAnisotropy, D3D11_COMPARISON_NEVER, border, 0.f, FLT_MAX);
+
+	hr = mDirect3DDevice->CreateSamplerState(&samplerDesc6, &AnisotropicClamp);
 }

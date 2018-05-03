@@ -31,6 +31,8 @@ D3D11ViewPort::D3D11ViewPort(D3D11Device *device, HWND hWnd, unsigned int backBu
 	
 	DepthStencilTexture = make_shared<D3D11Texture2D>(pDevice);
 	DepthStencilTexture->Create(Width, Height, nullptr, false, true);
+
+	Resource = make_shared<CD3D11_VIEWPORT>(0.f, 0.f, Width, Height);
 }
 
 D3D11ViewPort::~D3D11ViewPort()
@@ -49,8 +51,7 @@ void D3D11ViewPort::Clear()
 
 	pDevice->GetContext()->OMSetRenderTargets(1, &rtv, dsv);
 
-	CD3D11_VIEWPORT viewport(0.0f, 0.0f, Width, Height);
-	pDevice->GetContext()->RSSetViewports(1, &viewport);
+	pDevice->GetContext()->RSSetViewports(1, Resource.get());
 }
 
 

@@ -7,6 +7,7 @@
 #include "DepthStencilDesc.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "ViewPort.h"
 #include <vector>
 
 using namespace std;
@@ -33,5 +34,11 @@ public:
 	virtual IndexBuffer* CreateIndexBuffer(const void *pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage) = 0;
 	virtual void SetVertexBuffer(VertexBuffer *vertexBuffer, unsigned int StartSlot, unsigned int Stride, unsigned int Offset) = 0;
 	virtual void SetIndexBuffer(IndexBuffer *indexBuffer) = 0;
+	virtual void Draw(unsigned int vertexCount) = 0;
 	virtual void DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex) = 0;
+	virtual void SetViewport(ViewPort *pViewPort) = 0;
+	virtual void SetBlendState(COMMON_BLEND_STATES state) = 0;
+	virtual void SetDepthStencilState(COMMON_DEPTH_STENCIL_STATES state) = 0;
+	virtual void SetRasterizerState(COMMON_RASTERIZER_STATES state) = 0;
+	virtual void SetSamplerState(COMMON_SAMPLER_STATES state) = 0;
 };

@@ -15,6 +15,7 @@ public:
 	~D3D11ViewPort();
 	void Present() override;
 	void Clear() override;
+	shared_ptr<D3D11_VIEWPORT> Resource;
 private:
 	HWND WindowHandle;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain;
