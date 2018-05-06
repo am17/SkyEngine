@@ -45,4 +45,6 @@ public:
 
 	virtual void Draw(unsigned int vertexCount) = 0;
 	virtual void DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex) = 0;
+
+	virtual void CopyMsTextureToTexture(Texture2D *srcTexture, Texture2D *dstTexture) = 0;
 };

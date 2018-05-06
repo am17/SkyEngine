@@ -45,6 +45,8 @@ public:
 
 	void Draw(unsigned int vertexCount) override;
 	void DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex) override;
+
+	void CopyMsTextureToTexture(Texture2D *srcTexture, Texture2D *dstTexture) override;
 private:
 	D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode);
 	D3D11_COMPARISON_FUNC ConvertCompareFunction(COMPARISON_FUNCTION ComparisonFunction);

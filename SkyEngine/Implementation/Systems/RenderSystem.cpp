@@ -86,7 +86,7 @@ void RenderSystem::RenderToBackBuffer()
 
 	device->SetRenderTarget(viewPort->RenderTargetTexture, viewPort->DepthStencilTexture, false, false);
 
-	//pContext->ResolveSubresource(main_color_resource_resolved, 0, main_color_resource, 0, DXGI_FORMAT_R8G8B8A8_UNORM);//main_color_resource - ms, main_color_resource_resolved -> g_MainTexture
+	device->CopyMsTextureToTexture(drawingSurface, drawingSurfaceResolved);//drawingSurfaceResolved -> g_MainTexture
 
 	//pContext->PSSetShaderResources(12, 1, &g_MainTexture);
 

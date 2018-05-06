@@ -647,6 +647,17 @@ void D3D11Device::DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int 
 	mD3DDeviceIMContext->DrawIndexed(3, StartIndex, BaseVertexIndex);
 }
 
+void D3D11Device::CopyMsTextureToTexture(Texture2D * srcTexture, Texture2D * dstTexture)
+{
+	D3D11Texture2D *srctexture = static_cast<D3D11Texture2D*>(srcTexture);
+	D3D11Texture2D *texture = static_cast<D3D11Texture2D*>(dstTexture);
+
+	D3D11_TEXTURE2D_DESC desc;
+	texture->Resource->GetDesc(&desc);
+
+	mD3DDeviceIMContext->ResolveSubresource(srctexture->Resource.Get(), 0, texture->Resource.Get(), 0, desc.Format);
+}
+
 void D3D11Device::SetViewport(ViewPort * pViewPort)
 {
 	assert(pViewPort != nullptr);
