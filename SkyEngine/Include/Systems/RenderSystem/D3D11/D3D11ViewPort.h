@@ -19,8 +19,6 @@ public:
 private:
 	HWND WindowHandle;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> SwapChain;
-	shared_ptr<D3D11Texture2D> RenderTargetTexture;
-	shared_ptr<D3D11Texture2D> DepthStencilTexture;
 
 	D3D11Device *pDevice;
 	float Width;

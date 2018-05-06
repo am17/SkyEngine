@@ -10,6 +10,7 @@
 #include "Systems\RenderSystem\D3D11\D3D11VertexBuffer.h"
 #include "Systems\RenderSystem\D3D11\D3D11IndexBuffer.h"
 #include "Systems\RenderSystem\D3D11\D3D11ViewPort.h"
+#include "Systems\RenderSystem\D3D11\D3D11Texture2D.h"
 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
@@ -61,15 +62,12 @@ bool D3D11Device::Init()
 	return true;
 }
 
-void *D3D11Device::CreateTexture2D(unsigned int width, unsigned int height, const void * pData, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality)
+Texture2D *D3D11Device::CreateTexture2D(unsigned int width, unsigned int height, const void * pData, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality)
 {
 	assert(width > 0 && height > 0);
 	assert(createRTV != createDSV);
 
-	Microsoft::WRL::ComPtr<ID3D11Texture2D> TextureResource;
-	Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureSRV;
-	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> textureRTV;
-	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> textureDSV;
+	D3D11Texture2D *texture = new D3D11Texture2D(width, height, multiSampleCount > 1);
 
 	D3D11_TEXTURE2D_DESC textureDesc;
 	ZeroMemory(&textureDesc, sizeof(textureDesc));
@@ -104,9 +102,73 @@ void *D3D11Device::CreateTexture2D(unsigned int width, unsigned int height, cons
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = 0;
 
-	textureSRV_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureSRV_desc.Format = createDSV ? DXGI_FORMAT_R32_FLOAT : DXGI_FORMAT_R8G8B8A8_UNORM;
 	textureSRV_desc.ViewDimension = multiSampleCount > 1 ? D3D11_SRV_DIMENSION_TEXTURE2DMS : D3D11_SRV_DIMENSION_TEXTURE2D;
 	textureSRV_desc.Texture2D.MipLevels = textureDesc.MipLevels;
+	textureSRV_desc.Texture2D.MostDetailedMip = 0;
+
+	HRESULT result = mDirect3DDevice->CreateTexture2D(&textureDesc, 0, texture->Resource.ReleaseAndGetAddressOf());
+
+	result = mDirect3DDevice->CreateShaderResourceView(texture->Resource.Get(), &textureSRV_desc, texture->ShaderResourceView.ReleaseAndGetAddressOf());
+	
+	assert(SUCCEEDED(result));
+
+	if (createDSV)
+	{
+		DSVDesc.Format = DXGI_FORMAT_D32_FLOAT;
+		DSVDesc.ViewDimension = multiSampleCount > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
+		DSVDesc.Flags = 0;
+		DSVDesc.Texture2D.MipSlice = 0;
+
+		result = mDirect3DDevice->CreateDepthStencilView(texture->Resource.Get(), &DSVDesc, texture->DepthStencilView.ReleaseAndGetAddressOf());
+	}
+
+	if (createRTV)
+	{
+		//D3D11_TEXTURE2D_DESC desc;
+		//texture->GetDesc(&desc);
+		//Width = desc.Width;
+		//Height = desc.Height;
+
+		//nullptr for all subresorces in 0 mipmap level
+		result = mDirect3DDevice->CreateRenderTargetView(texture->Resource.Get(), nullptr, texture->RenderTargetView.ReleaseAndGetAddressOf());
+	}
+
+	assert(SUCCEEDED(result));
+
+	return texture;
+}
+
+Texture2D * D3D11Device::CreateTexture2D(ID3D11Texture2D * texture, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality)
+{
+	D3D11_TEXTURE2D_DESC desc;
+	texture->GetDesc(&desc);
+	unsigned int Width = desc.Width;
+	unsigned int Height = desc.Height;
+
+	D3D11Texture2D *texture2d = new D3D11Texture2D(Width, Height, multiSampleCount > 1);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC textureSRV_desc;
+	ZeroMemory(&textureSRV_desc, sizeof(textureSRV_desc));
+
+	D3D11_DEPTH_STENCIL_VIEW_DESC DSVDesc;
+	ZeroMemory(&DSVDesc, sizeof(DSVDesc));
+
+	unsigned int BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+	if (createRTV)
+	{
+		BindFlags |= D3D11_BIND_RENDER_TARGET;
+	}
+
+	if (createDSV)
+	{
+		BindFlags |= D3D11_BIND_DEPTH_STENCIL;
+	}
+
+	textureSRV_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	textureSRV_desc.ViewDimension = multiSampleCount > 1 ? D3D11_SRV_DIMENSION_TEXTURE2DMS : D3D11_SRV_DIMENSION_TEXTURE2D;
+	textureSRV_desc.Texture2D.MipLevels = desc.MipLevels;
 	textureSRV_desc.Texture2D.MostDetailedMip = 0;
 
 	DSVDesc.Format = DXGI_FORMAT_D32_FLOAT;
@@ -114,24 +176,28 @@ void *D3D11Device::CreateTexture2D(unsigned int width, unsigned int height, cons
 	DSVDesc.Flags = 0;
 	DSVDesc.Texture2D.MipSlice = 0;
 
-	HRESULT result = mDirect3DDevice->CreateTexture2D(&textureDesc, 0, TextureResource.ReleaseAndGetAddressOf());
-	result = mDirect3DDevice->CreateShaderResourceView(TextureResource.Get(), &textureSRV_desc, textureSRV.ReleaseAndGetAddressOf());
-	
-	assert(SUCCEEDED(result));
+	HRESULT result;
+	/*if (desc.BindFlags == D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET || desc.BindFlags == D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL)
+	{
+		result = mDirect3DDevice->CreateShaderResourceView(texture, &textureSRV_desc, texture2d->ShaderResourceView.ReleaseAndGetAddressOf());
+
+		assert(SUCCEEDED(result));
+	}*/
 
 	if (createDSV)
 	{
-		result = mDirect3DDevice->CreateDepthStencilView(TextureResource.Get(), &DSVDesc, textureDSV.ReleaseAndGetAddressOf());
+		result = mDirect3DDevice->CreateDepthStencilView(texture, &DSVDesc, texture2d->DepthStencilView.ReleaseAndGetAddressOf());
 	}
 
 	if (createRTV)
 	{
-		result = mDirect3DDevice->CreateRenderTargetView(TextureResource.Get(), nullptr, textureRTV.ReleaseAndGetAddressOf());
+		//nullptr for all subresorces in 0 mipmap level
+		result = mDirect3DDevice->CreateRenderTargetView(texture, nullptr, texture2d->RenderTargetView.ReleaseAndGetAddressOf());
 	}
 
 	assert(SUCCEEDED(result));
 
-	return TextureResource.Get();
+	return texture2d;
 }
 
 VertexShader * D3D11Device::CreateVertexShader(const void * pByteCode, size_t ByteCodeLength)
@@ -533,6 +599,40 @@ void D3D11Device::SetIndexBuffer(IndexBuffer * indexBuffer)
 	const DXGI_FORMAT Format = (indexBuffer->GetStride() == sizeof(unsigned short) ? DXGI_FORMAT_R16_UINT : DXGI_FORMAT_R32_UINT);
 
 	mD3DDeviceIMContext->IASetIndexBuffer(IndexBufferImpl->Resource.Get(), Format, 0);
+}
+
+void D3D11Device::SetRenderTarget(Texture2D * renderTarget, Texture2D *depthStencil, bool clearRenderTarget, bool clearDepthStensil)
+{
+	ID3D11RenderTargetView *rtv = nullptr;
+	ID3D11DepthStencilView *dsv = nullptr;
+
+	if (renderTarget != nullptr)
+	{
+		D3D11Texture2D *texture = static_cast<D3D11Texture2D*>(renderTarget);
+
+		rtv = texture->RenderTargetView.Get();
+	}
+
+	if (depthStencil != nullptr)
+	{
+		D3D11Texture2D *texture = static_cast<D3D11Texture2D*>(depthStencil);
+
+		dsv = texture->DepthStencilView.Get();
+	}
+
+	if (clearRenderTarget)
+	{
+		float ClearColor[4] = { 0.8f, 0.8f, 1.0f, 1.0f };
+
+		mD3DDeviceIMContext->ClearRenderTargetView(rtv, ClearColor);
+	}
+
+	if (clearDepthStensil)
+	{
+		mD3DDeviceIMContext->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	}
+
+	mD3DDeviceIMContext->OMSetRenderTargets(1, rtv != nullptr ? &rtv : nullptr, dsv);
 }
 
 void D3D11Device::Draw(unsigned int vertexCount)

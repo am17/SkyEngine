@@ -50,6 +50,10 @@ void RenderSystem::Init(HWND hWnd, int width, int height)
 	meshFactory = std::make_unique<MeshFactory>(device.get());
 
 	shaderFactory = std::make_unique<ShaderFactory>(device.get());
+
+	drawingSurface = device->CreateTexture2D(width*main_buffer_size_multiplier, height*main_buffer_size_multiplier, nullptr, true, false, 1, 0);//2?
+
+	drawingSurfaceResolved = device->CreateTexture2D(width*main_buffer_size_multiplier, height*main_buffer_size_multiplier, nullptr, true, false, 1, 0);
 }
 
 bool RenderSystem::RegisterEntity(Entity * entity)
@@ -80,9 +84,9 @@ void RenderSystem::RenderToBackBuffer()
 	device->SetDepthStencilState(COMMON_DEPTH_STENCIL_STATES::DSS_DEPTHNONE);
 	device->SetBlendState(COMMON_BLEND_STATES::BS_OPAQUE);
 
-	//pContext->OMSetRenderTargets(1, &colorBuffer, backBuffer);
+	device->SetRenderTarget(viewPort->RenderTargetTexture, viewPort->DepthStencilTexture, false, false);
 
-	//pContext->ResolveSubresource(main_color_resource_resolved, 0, main_color_resource, 0, DXGI_FORMAT_R8G8B8A8_UNORM);
+	//pContext->ResolveSubresource(main_color_resource_resolved, 0, main_color_resource, 0, DXGI_FORMAT_R8G8B8A8_UNORM);//main_color_resource - ms, main_color_resource_resolved -> g_MainTexture
 
 	//pContext->PSSetShaderResources(12, 1, &g_MainTexture);
 

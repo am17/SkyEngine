@@ -5,16 +5,20 @@
 #include <wrl/client.h>
 #include "common.h"
 
+using namespace std;
+
 class SKYENGINEDLL D3D11Device : public IDeviceImpl
 {
 public:
 	D3D11Device();
 	virtual ~D3D11Device();
 	bool Init() override;
-	void *CreateTexture2D(unsigned int width, unsigned int height, const void * pData, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality) override;
 	ID3D11Device *GetDevice() const { return mDirect3DDevice.Get();  }
 	IDXGIFactory1 *GetFactory() const { return mDXGIFactory.Get(); }
 	ID3D11DeviceContext *GetContext() const { return mD3DDeviceIMContext.Get(); }
+
+	Texture2D *CreateTexture2D(unsigned int width, unsigned int height, const void * pData, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality) override;
+	Texture2D *CreateTexture2D(ID3D11Texture2D * texture, bool createRTV, bool createDSV, unsigned int multiSampleCount, unsigned int multiSampleQuality);
 	VertexShader* CreateVertexShader(const void* pByteCode, size_t ByteCodeLength) override;
 	HullShader* CreateHullShader(const void* pByteCode, size_t ByteCodeLength) override;
 	DomainShader* CreateDomainShader(const void* pByteCode, size_t ByteCodeLength) override;
@@ -29,15 +33,18 @@ public:
 	DepthStencilState* CreateDepthStencilState(const DepthStencilDesc& Initializer) override;
 	VertexBuffer* CreateVertexBuffer(const void * pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage) override;
 	IndexBuffer* CreateIndexBuffer(const void *pData, unsigned int elementsCount, unsigned int stride, BUFFER_USAGE_FLAGS InUsage) override;
-	void SetVertexBuffer(VertexBuffer *vertexBuffer, unsigned int StartSlot, unsigned int Stride, unsigned int Offset) override;
-	void SetIndexBuffer(IndexBuffer *indexBuffer) override;
-	void Draw(unsigned int vertexCount) override;
-	void DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex) override;
+
 	void SetViewport(ViewPort *pViewPort) override;
 	void SetBlendState(COMMON_BLEND_STATES state) override;
 	void SetDepthStencilState(COMMON_DEPTH_STENCIL_STATES state) override;
 	void SetRasterizerState(COMMON_RASTERIZER_STATES state) override;
 	void SetSamplerState(COMMON_SAMPLER_STATES state) override;
+	void SetVertexBuffer(VertexBuffer *vertexBuffer, unsigned int StartSlot, unsigned int Stride, unsigned int Offset) override;
+	void SetIndexBuffer(IndexBuffer *indexBuffer) override;
+	void SetRenderTarget(Texture2D *renderTarget, Texture2D *depthStencil, bool clearRenderTarget, bool clearDepthStensil) override;
+
+	void Draw(unsigned int vertexCount) override;
+	void DrawIndexedPrimitive(unsigned int NumPrimitives, unsigned int StartIndex, int BaseVertexIndex) override;
 private:
 	D3D11_TEXTURE_ADDRESS_MODE ConvertAddressMode(SAMPLER_ADDRESS_MODE AddressMode);
 	D3D11_COMPARISON_FUNC ConvertCompareFunction(COMPARISON_FUNCTION ComparisonFunction);

@@ -8,6 +8,8 @@
 #include "Systems\RenderSystem\MeshFactory.h"
 #include "Systems\RenderSystem\ShaderFactory.h"
 
+#define main_buffer_size_multiplier			1.1f
+
 class RenderSystem : public ISystem
 {
 public:
@@ -28,4 +30,7 @@ private:
 	std::unique_ptr<ViewPort> viewPort;
 	std::unique_ptr<MeshFactory> meshFactory;
 	std::unique_ptr<ShaderFactory> shaderFactory;
+
+	Texture2D* drawingSurface;
+	Texture2D* drawingSurfaceResolved;
 };
